@@ -264,6 +264,7 @@ export default async function Blogs() {
 }
 
 /* ===== src\app\blogs\[slug]\page.tsx ===== */
+/* ===== src\app\blogs\[slug]\page.tsx ===== */
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -275,9 +276,9 @@ type Blog = {
   createdAt: string;
 };
 
-// Define the props type explicitly
+// Define the props type explicitly, with params as a Promise
 interface BlogPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -314,10 +315,13 @@ async function getBlog(slug: string) {
 }
 
 export default async function BlogPage({ params }: BlogPageProps) {
+  // Await the params Promise to get the slug
+  const { slug } = await params;
+
   let blog = null;
-  
+
   try {
-    blog = await getBlog(params.slug);
+    blog = await getBlog(slug);
   } catch (error) {
     console.error("Error in BlogPage:", error);
     return (
@@ -625,7 +629,7 @@ interface Project {
   title: string;
   thumbnail?: string;
   description: string;
-  features: string[];
+  features: string[] | string; // Accept both array and string
   liveLink?: string;
   repoLink?: string;
   createdAt: string;
@@ -1309,54 +1313,58 @@ export default function Home() {
 }
 
 /* ===== src\app\projects\page.tsx ===== */
+"use client";
+
+import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectsCard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Code } from "lucide-react";
 import Link from "next/link";
-
-async function getProjects() {
-  try {
-    const res = await fetch("https://next-prisma-portfolio-backend.vercel.app/api/projects", {
-      next: { revalidate: 3600 }, // ISR every hour
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    if (!res.ok) {
-      console.error("Failed to fetch projects:", res.status, res.statusText);
-      throw new Error(`Failed to fetch projects: ${res.status} ${res.statusText}`);
-    }
-    
-    const data = await res.json();
-    console.log("Projects data:", data); // For debugging
-    return data;
-  } catch (error) {
-    console.error("Error fetching projects:", error);
-    throw error;
-  }
-}
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Project {
   id: number;
   title: string;
   thumbnail?: string;
   description: string;
-  features: string[];
+  features: string[] | string; // Accept both array and string
   liveLink?: string;
   repoLink?: string;
 }
 
-export default async function Projects() {
-  let projects: Project[] = [];
-  
-  try {
-    projects = await getProjects();
-  } catch (error) {
-    console.error("Error in Projects page:", error);
-  }
+export default function Projects() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await fetch("https://next-prisma-portfolio-backend.vercel.app/api/projects");
+        if (!res.ok) {
+          throw new Error(`Failed to fetch projects: ${res.status} ${res.statusText}`);
+        }
+        const data = await res.json();
+        console.log("Projects data:", data);
+        // Ensure we have an array
+        const projectsArray = Array.isArray(data) ? data : [];
+        setProjects(projectsArray);
+      } catch (err) {
+        console.error("Error fetching projects:", err);
+        setError(err instanceof Error ? err.message : "Unknown error");
+        // Ensure we have an empty array on error
+        setProjects([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-background transition-colors duration-300">
@@ -1377,7 +1385,29 @@ export default async function Projects() {
           </p>
         </div>
         
-        {projects && projects.length > 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="space-y-4">
+                <Skeleton className="h-48 w-full rounded-xl" />
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
+              </div>
+            ))}
+          </div>
+        ) : error ? (
+          <div className="text-center py-16">
+            <div className="bg-destructive/10 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+              <Code className="h-12 w-12 text-destructive" />
+            </div>
+            <h2 className="text-2xl font-semibold mb-4">Error Loading Projects</h2>
+            <p className="text-muted-foreground mb-6">{error}</p>
+            <Button asChild variant="outline" className="rounded-full">
+              <Link href="/">Back to Home</Link>
+            </Button>
+          </div>
+        ) : projects && projects.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project: Project) => (
               <ProjectCard key={project.id} project={project} />
@@ -1485,6 +1515,15 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
   const [isMounted, setIsMounted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Update form state when editingBlog changes
+  useEffect(() => {
+    if (editingBlog) {
+      setTitle(editingBlog.title || "");
+    } else {
+      setTitle("");
+    }
+  }, [editingBlog]);
+
   // Prevent SSR by only initializing editor on client
   useEffect(() => {
     setIsMounted(true);
@@ -1500,6 +1539,15 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
     },
     immediatelyRender: false, // Explicitly disable SSR rendering
   });
+
+  // Update editor content when editingBlog changes
+  useEffect(() => {
+    if (editor && editingBlog) {
+      editor.commands.setContent(editingBlog.content || "");
+    } else if (editor) {
+      editor.commands.clearContent();
+    }
+  }, [editor, editingBlog]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1761,7 +1809,7 @@ interface Project {
   title: string;
   thumbnail?: string;
   description: string;
-  features: string[];
+  features: string[] | string; // Accept both array and string
   liveLink?: string;
   repoLink?: string;
   createdAt: string;
@@ -1776,11 +1824,37 @@ interface ProjectFormProps {
 export default function ProjectForm({ editingProject, setEditingProject, refreshProjects }: ProjectFormProps) {
   const [title, setTitle] = useState(editingProject?.title || "");
   const [thumbnail, setThumbnail] = useState(editingProject?.thumbnail || "");
-  const [features, setFeatures] = useState(editingProject?.features?.join(", ") || "");
+  const [features, setFeatures] = useState("");
   const [liveLink, setLiveLink] = useState(editingProject?.liveLink || "");
   const [repoLink, setRepoLink] = useState(editingProject?.repoLink || "");
   const [isMounted, setIsMounted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Update form state when editingProject changes
+  useEffect(() => {
+    if (editingProject) {
+      setTitle(editingProject.title || "");
+      setThumbnail(editingProject.thumbnail || "");
+      
+      // Handle features whether they're an array or string
+      if (Array.isArray(editingProject.features)) {
+        setFeatures(editingProject.features.join(", "));
+      } else if (typeof editingProject.features === 'string') {
+        setFeatures(editingProject.features);
+      } else {
+        setFeatures("");
+      }
+      
+      setLiveLink(editingProject.liveLink || "");
+      setRepoLink(editingProject.repoLink || "");
+    } else {
+      setTitle("");
+      setThumbnail("");
+      setFeatures("");
+      setLiveLink("");
+      setRepoLink("");
+    }
+  }, [editingProject]);
 
   // Prevent SSR by only initializing editor on client
   useEffect(() => {
@@ -1797,6 +1871,15 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
     },
     immediatelyRender: false, // Explicitly disable SSR rendering
   });
+
+  // Update editor content when editingProject changes
+  useEffect(() => {
+    if (editor && editingProject) {
+      editor.commands.setContent(editingProject.description || "");
+    } else if (editor) {
+      editor.commands.clearContent();
+    }
+  }, [editor, editingProject]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1994,7 +2077,6 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
 /* ===== src\components\ProjectsCard.tsx ===== */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 import { ExternalLink, Github } from "lucide-react";
 
 interface ProjectCardProps {
@@ -2003,7 +2085,7 @@ interface ProjectCardProps {
     title: string;
     thumbnail?: string;
     description: string;
-    features: string[];
+    features: string[] | string; // Accept both array and string
     liveLink?: string;
     repoLink?: string;
   };
@@ -2013,14 +2095,45 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   // Use Unsplash image if no thumbnail is provided
   const imageUrl = project.thumbnail || `https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=400&q=80`;
   
+  // Ensure features is always an array
+  let featuresArray: string[] = [];
+  try {
+    if (Array.isArray(project.features)) {
+      featuresArray = project.features;
+    } else if (typeof project.features === 'string') {
+      // Handle both comma-separated strings and JSON strings
+      try {
+        // Try to parse as JSON array first
+        const parsed = JSON.parse(project.features);
+        if (Array.isArray(parsed)) {
+          featuresArray = parsed;
+        } else {
+          // If not an array, treat as comma-separated
+          featuresArray = project.features.split(',').map(f => f.trim()).filter(Boolean);
+        }
+      } catch (e) {
+        // If JSON parsing fails, treat as comma-separated
+        featuresArray = project.features.split(',').map(f => f.trim()).filter(Boolean);
+      }
+    }
+  } catch (error) {
+    console.error("Error processing features:", error);
+    // Fallback to empty array
+    featuresArray = [];
+  }
+  
   return (
-    <Card className="overflow-hidden rounded-xl hover:shadow-card-hover transition-all duration-300 animate-fadeIn group border-border/50 hover:border-primary/30">
+    <Card className="overflow-hidden rounded-xl hover:shadow-card-hover transition-all duration-300 group border-border/50 hover:border-primary/30">
       <div className="relative h-48 w-full overflow-hidden">
         <img 
           src={imageUrl} 
           alt={project.title} 
           className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
+          onError={(e) => {
+            // Fallback image on error
+            e.currentTarget.src = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=400&q=80";
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
@@ -2035,7 +2148,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           dangerouslySetInnerHTML={{ __html: project.description }} 
         />
         <div className="flex flex-wrap gap-1 mb-4">
-          {project.features.slice(0, 3).map((feature, idx) => (
+          {featuresArray.slice(0, 3).map((feature, idx) => (
             <span 
               key={idx} 
               className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full border border-primary/20"
@@ -2043,9 +2156,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               {feature}
             </span>
           ))}
-          {project.features.length > 3 && (
+          {featuresArray.length > 3 && featuresArray.length > 0 && (
             <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full border border-border">
-              +{project.features.length - 3} more
+              +{featuresArray.length - 3} more
             </span>
           )}
         </div>
