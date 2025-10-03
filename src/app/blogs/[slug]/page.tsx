@@ -1,3 +1,4 @@
+/* ===== src\app\blogs\[slug]\page.tsx ===== */
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +9,11 @@ type Blog = {
   content: string;
   createdAt: string;
 };
+
+// Define the props type explicitly, with params as a Promise
+interface BlogPageProps {
+  params: Promise<{ slug: string }>;
+}
 
 export async function generateStaticParams() {
   try {
@@ -42,11 +48,14 @@ async function getBlog(slug: string) {
   }
 }
 
-export default async function BlogPage({ params }: { params: { slug: string } }) {
+export default async function BlogPage({ params }: BlogPageProps) {
+  // Await the params Promise to get the slug
+  const { slug } = await params;
+
   let blog = null;
-  
+
   try {
-    blog = await getBlog(params.slug);
+    blog = await getBlog(slug);
   } catch (error) {
     console.error("Error in BlogPage:", error);
     return (
