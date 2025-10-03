@@ -117,7 +117,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground transition-colors duration-100;
+    @apply bg-background text-foreground transition-colors duration-300;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
@@ -178,5 +178,49 @@
 @media (max-width: 768px) {
   .container {
     @apply px-4;
+  }
+  
+  /* Adjustments for smaller screens */
+  .text-4xl {
+    @apply text-3xl;
+  }
+  
+  .text-5xl {
+    @apply text-4xl;
+  }
+  
+  .text-6xl {
+    @apply text-5xl;
+  }
+  
+  .py-24 {
+    @apply py-16;
+  }
+  
+  .mb-24 {
+    @apply mb-16;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Further adjustments for very small screens */
+  .text-3xl {
+    @apply text-2xl;
+  }
+  
+  .text-4xl {
+    @apply text-3xl;
+  }
+  
+  .py-16 {
+    @apply py-12;
+  }
+  
+  .px-8 {
+    @apply px-6;
+  }
+  
+  .py-6 {
+    @apply py-4;
   }
 }

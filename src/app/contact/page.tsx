@@ -124,7 +124,7 @@ export default function Contact() {
                 
                 <div className="pt-6">
                   <h3 className="font-semibold mb-4">Follow Me</h3>
-                  <div className="flex gap-4">
+                  <div className="flex flex-wrap gap-4">
                     <Button variant="outline" size="icon" asChild className="rounded-full">
                       <Link href="https://github.com" target="_blank" aria-label="GitHub">
                         <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -163,7 +163,7 @@ export default function Contact() {
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="name">Name</Label>
                       <Input 

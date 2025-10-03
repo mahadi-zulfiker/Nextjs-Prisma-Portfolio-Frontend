@@ -77,13 +77,13 @@ export default function Header() {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-background border-t border-border/50">
-          <div className="container mx-auto px-4 py-3 flex flex-col space-y-2">
+          <div className="container mx-auto px-4 py-3 flex flex-col space-y-2 max-h-[calc(100vh-100px)] overflow-y-auto">
             {navItems.map((item) => (
               <Button 
                 key={item.href}
                 variant="ghost" 
                 asChild
-                className="justify-start text-foreground/80 hover:text-foreground hover:bg-accent/50 rounded-full px-4 py-2"
+                className="justify-start text-foreground/80 hover:text-foreground hover:bg-accent/50 rounded-full px-4 py-3"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <Link href={item.href}>{item.label}</Link>
