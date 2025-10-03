@@ -1,8 +1,14 @@
+
 /* ===== components/ProjectForm.tsx ===== */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 
 interface ProjectFormProps {
   editingProject: any | null;
@@ -13,21 +19,37 @@ interface ProjectFormProps {
 export default function ProjectForm({ editingProject, setEditingProject, refreshProjects }: ProjectFormProps) {
   const [title, setTitle] = useState(editingProject?.title || "");
   const [thumbnail, setThumbnail] = useState(editingProject?.thumbnail || "");
-  const [description, setDescription] = useState(editingProject?.description || "");
   const [features, setFeatures] = useState(editingProject?.features.join(", ") || "");
   const [liveLink, setLiveLink] = useState(editingProject?.liveLink || "");
   const [repoLink, setRepoLink] = useState(editingProject?.repoLink || "");
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Prevent SSR by only initializing editor on client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: editingProject?.description || "",
+    editorProps: {
+      attributes: {
+        class: 'prose focus:outline-none min-h-[150px] p-2 border rounded',
+      },
+    },
+    immediatelyRender: false, // Explicitly disable SSR rendering
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !description) {
+    if (!title || !editor?.getHTML()) {
       toast.error("Title and description are required");
       return;
     }
     const data = {
       title,
       thumbnail,
-      description,
+      description: editor.getHTML(),
       features: features.split(",").map((f: string) => f.trim()),
       liveLink,
       repoLink,
@@ -50,7 +72,7 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
       toast.success(editingProject ? "Project updated" : "Project created");
       setTitle("");
       setThumbnail("");
-      setDescription("");
+      editor?.commands.clearContent();
       setFeatures("");
       setLiveLink("");
       setRepoLink("");
@@ -61,76 +83,71 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
     }
   };
 
+  if (!isMounted) {
+    return null; // Prevent rendering on server
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="mb-4">
-        <label htmlFor="title" className="block mb-1">Title</label>
-        <input
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <Label htmlFor="title">Title</Label>
+        <Input
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border rounded"
           required
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="thumbnail" className="block mb-1">Thumbnail URL</label>
-        <input
+      <div>
+        <Label htmlFor="thumbnail">Thumbnail URL</Label>
+        <Input
           id="thumbnail"
           value={thumbnail}
           onChange={(e) => setThumbnail(e.target.value)}
-          className="w-full p-2 border rounded"
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="description" className="block mb-1">Description</label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full p-2 border rounded"
-          required
-        />
+      <div>
+        <Label>Description</Label>
+        <EditorContent editor={editor} />
       </div>
-      <div className="mb-4">
-        <label htmlFor="features" className="block mb-1">Features (comma-separated)</label>
-        <input
+      <div>
+        <Label htmlFor="features">Features (comma-separated)</Label>
+        <Input
           id="features"
           value={features}
           onChange={(e) => setFeatures(e.target.value)}
-          className="w-full p-2 border rounded"
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="liveLink" className="block mb-1">Live Link</label>
-        <input
+      <div>
+        <Label htmlFor="liveLink">Live Link</Label>
+        <Input
           id="liveLink"
           value={liveLink}
           onChange={(e) => setLiveLink(e.target.value)}
-          className="w-full p-2 border rounded"
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="repoLink" className="block mb-1">Repo Link</label>
-        <input
+      <div>
+        <Label htmlFor="repoLink">Repo Link</Label>
+        <Input
           id="repoLink"
           value={repoLink}
           onChange={(e) => setRepoLink(e.target.value)}
-          className="w-full p-2 border rounded"
         />
       </div>
-      <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
-        {editingProject ? "Update Project" : "Create Project"}
-      </button>
-      {editingProject && (
-        <button
-          type="button"
-          onClick={() => setEditingProject(null)}
-          className="ml-2 bg-gray-500 text-white px-4 py-2 rounded"
-        >
-          Cancel
-        </button>
-      )}
+      <div className="space-x-2">
+        <Button type="submit">
+          {editingProject ? "Update Project" : "Create Project"}
+        </Button>
+        {editingProject && (
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => setEditingProject(null)}
+          >
+            Cancel
+          </Button>
+        )}
+      </div>
     </form>
   );
 }

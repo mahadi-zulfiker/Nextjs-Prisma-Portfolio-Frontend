@@ -1,6 +1,6 @@
-/* ===== app/blogs/[slug]/page.tsx ===== */
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export async function generateStaticParams() {
   const res = await fetch("http://localhost:5000/api/blogs");
@@ -26,15 +26,21 @@ export default async function BlogPage({ params }: { params: { slug: string } })
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-4">{blog.title}</h1>
-        <div className="text-sm text-gray-500 mb-6">
-          {new Date(blog.createdAt).toLocaleDateString()}
-        </div>
-        <div
-          className="prose max-w-none"
-          dangerouslySetInnerHTML={{ __html: blog.content }}
-        />
+      <main className="flex-1 container mx-auto px-4 py-12">
+        <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-3xl">{blog.title}</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {new Date(blog.createdAt).toLocaleDateString()}
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div
+              className="prose max-w-none dark:prose-invert"
+              dangerouslySetInnerHTML={{ __html: blog.content }}
+            />
+          </CardContent>
+        </Card>
       </main>
       <Footer />
     </div>

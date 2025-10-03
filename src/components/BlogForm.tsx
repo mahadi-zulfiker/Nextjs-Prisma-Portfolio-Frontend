@@ -1,11 +1,13 @@
 /* ===== components/BlogForm.tsx ===== */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-// import dynamic from "next/dynamic";
-// const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-// import "react-quill/dist/quill.snow.css";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 
 interface BlogFormProps {
   editingBlog: any | null;
@@ -15,11 +17,27 @@ interface BlogFormProps {
 
 export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: BlogFormProps) {
   const [title, setTitle] = useState(editingBlog?.title || "");
-  const [content, setContent] = useState(editingBlog?.content || "");
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Prevent SSR by only initializing editor on client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: editingBlog?.content || "",
+    editorProps: {
+      attributes: {
+        class: 'prose focus:outline-none min-h-[200px] p-2 border rounded',
+      },
+    },
+    immediatelyRender: false, // Explicitly disable SSR rendering
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !content) {
+    if (!title || !editor?.getHTML()) {
       toast.error("Title and content are required");
       return;
     }
@@ -35,12 +53,12 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ title, content }),
+        body: JSON.stringify({ title, content: editor.getHTML() }),
       });
       if (!res.ok) throw new Error("Failed to save blog");
       toast.success(editingBlog ? "Blog updated" : "Blog created");
       setTitle("");
-      setContent("");
+      editor?.commands.clearContent();
       setEditingBlog(null);
       refreshBlogs();
     } catch (error) {
@@ -48,34 +66,39 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
     }
   };
 
+  if (!isMounted) {
+    return null; // Prevent rendering on server
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="mb-4">
-        <label htmlFor="title" className="block mb-1">Title</label>
-        <input
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <Label htmlFor="title">Title</Label>
+        <Input
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border rounded"
           required
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="content" className="block mb-1">Content</label>
-        {/* <ReactQuill value={content} onChange={setContent} /> */}
+      <div>
+        <Label>Content</Label>
+        <EditorContent editor={editor} />
       </div>
-      <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
-        {editingBlog ? "Update Blog" : "Create Blog"}
-      </button>
-      {editingBlog && (
-        <button
-          type="button"
-          onClick={() => setEditingBlog(null)}
-          className="ml-2 bg-gray-500 text-white px-4 py-2 rounded"
-        >
-          Cancel
-        </button>
-      )}
+      <div className="space-x-2">
+        <Button type="submit">
+          {editingBlog ? "Update Blog" : "Create Blog"}
+        </Button>
+        {editingBlog && (
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => setEditingBlog(null)}
+          >
+            Cancel
+          </Button>
+        )}
+      </div>
     </form>
   );
 }

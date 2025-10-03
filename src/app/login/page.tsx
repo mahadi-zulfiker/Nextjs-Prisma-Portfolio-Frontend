@@ -1,4 +1,3 @@
-/* ===== app/login/page.tsx ===== */
 "use client";
 
 import { useState } from "react";
@@ -7,6 +6,10 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email"),
@@ -28,49 +31,57 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
       if (!res.ok) {
-        throw new Error("Invalid credentials");
+        throw new Error((await res.json()).error || "Invalid credentials");
       }
       const { token } = await res.json();
       localStorage.setItem("token", token);
       toast.success("Logged in successfully");
       router.push("/dashboard");
     } catch (error: any) {
-      toast.error(error.message || "Login failed");
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
+      } else {
+        toast.error(error.message || "Login failed");
+      }
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-          <div className="mb-4">
-            <label htmlFor="email" className="block mb-1">Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="block mb-1">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
-            Login
-          </button>
-        </form>
+      <main className="flex-1 container mx-auto px-4 py-12 flex items-center justify-center">
+        <Card className="w-full max-w-md shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-3xl text-center">Login</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full">
+                Login
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </main>
       <Footer />
     </div>

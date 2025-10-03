@@ -1,5 +1,5 @@
-/* ===== components/BlogCard.tsx ===== */
 import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface BlogCardProps {
   blog: {
@@ -12,14 +12,18 @@ interface BlogCardProps {
 
 export default function BlogCard({ blog }: BlogCardProps) {
   return (
-    <div className="border rounded-lg p-4 hover:shadow-lg transition">
-      <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
-      <p className="text-sm text-gray-500 mb-4">
-        {new Date(blog.createdAt).toLocaleDateString()}
-      </p>
-      <Link href={`/blogs/${blog.slug}`} className="text-blue-500">
-        Read More
-      </Link>
-    </div>
+    <Card className="hover:shadow-xl transition-shadow">
+      <CardHeader>
+        <CardTitle className="text-xl">{blog.title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm text-muted-foreground mb-4">
+          {new Date(blog.createdAt).toLocaleDateString()}
+        </p>
+        <Link href={`/blogs/${blog.slug}`} className="text-primary hover:underline">
+          Read More
+        </Link>
+      </CardContent>
+    </Card>
   );
 }

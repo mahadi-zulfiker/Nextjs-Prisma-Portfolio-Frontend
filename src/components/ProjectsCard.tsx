@@ -1,4 +1,7 @@
-/* ===== components/ProjectCard.tsx ===== */
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 interface ProjectCardProps {
   project: {
     id: number;
@@ -13,27 +16,47 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <div className="border rounded-lg p-4 hover:shadow-lg transition">
+    <Card className="hover:shadow-xl transition-shadow overflow-hidden">
       {project.thumbnail && (
-        <img src={project.thumbnail} alt={project.title} className="w-full h-40 object-cover mb-4" />
+        <Image 
+          src={project.thumbnail} 
+          alt={project.title} 
+          width={400} 
+          height={200} 
+          className="w-full h-40 object-cover" 
+          loading="lazy"
+        />
       )}
-      <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-      <p className="mb-4">{project.description}</p>
-      <ul className="list-disc pl-4 mb-4">
-        {project.features.map((feature, idx) => (
-          <li key={idx}>{feature}</li>
-        ))}
-      </ul>
-      {project.liveLink && (
-        <a href={project.liveLink} target="_blank" rel="noopener noreferrer" className="text-blue-500 mr-4">
-          Live Demo
-        </a>
-      )}
-      {project.repoLink && (
-        <a href={project.repoLink} target="_blank" rel="noopener noreferrer" className="text-blue-500">
-          Repository
-        </a>
-      )}
-    </div>
+      <CardHeader>
+        <CardTitle className="text-xl">{project.title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div 
+          className="prose max-w-none mb-4 dark:prose-invert" 
+          dangerouslySetInnerHTML={{ __html: project.description }} 
+        />
+        <ul className="list-disc pl-4 mb-4 space-y-1">
+          {project.features.map((feature, idx) => (
+            <li key={idx} className="text-sm">{feature}</li>
+          ))}
+        </ul>
+        <div className="space-x-2">
+          {project.liveLink && (
+            <Button variant="outline" asChild>
+              <a href={project.liveLink} target="_blank" rel="noopener noreferrer">
+                Live Demo
+              </a>
+            </Button>
+          )}
+          {project.repoLink && (
+            <Button variant="outline" asChild>
+              <a href={project.repoLink} target="_blank" rel="noopener noreferrer">
+                Repository
+              </a>
+            </Button>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

@@ -1,4 +1,3 @@
-/* ===== app/dashboard/page.tsx ===== */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -8,6 +7,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BlogForm from "@/components/BlogForm";
 import ProjectForm from "@/components/ProjectForm";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Blog {
   id: number;
@@ -31,6 +33,7 @@ export default function Dashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -40,8 +43,7 @@ export default function Dashboard() {
       return;
     }
 
-    fetchBlogs(token);
-    fetchProjects(token);
+    Promise.all([fetchBlogs(token), fetchProjects(token)]).then(() => setLoading(false));
   }, [router]);
 
   const fetchBlogs = async (token: string) => {
@@ -109,60 +111,86 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded">
+      <main className="flex-1 container mx-auto px-4 py-12">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold">Dashboard</h1>
+          <Button variant="destructive" onClick={handleLogout}>
             Logout
-          </button>
+          </Button>
         </div>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">Manage Blogs</h2>
-          <BlogForm
-            editingBlog={editingBlog}
-            setEditingBlog={setEditingBlog}
-            refreshBlogs={() => fetchBlogs(localStorage.getItem("token")!)}
-          />
-          <ul className="mt-4">
-            {blogs.map((blog) => (
-              <li key={blog.id} className="flex justify-between items-center mb-2">
-                <span>{blog.title}</span>
-                <div>
-                  <button onClick={() => setEditingBlog(blog)} className="mr-2 text-blue-500">
-                    Edit
-                  </button>
-                  <button onClick={() => handleDeleteBlog(blog.id)} className="text-red-500">
-                    Delete
-                  </button>
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl">Manage Blogs</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <BlogForm
+                editingBlog={editingBlog}
+                setEditingBlog={setEditingBlog}
+                refreshBlogs={() => fetchBlogs(localStorage.getItem("token")!)}
+              />
+              {loading ? (
+                <div className="space-y-4 mt-4">
+                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="h-8 w-full" />
                 </div>
-              </li>
-            ))}
-          </ul>
+              ) : (
+                <ul className="mt-4 space-y-2">
+                  {blogs.map((blog) => (
+                    <li key={blog.id} className="flex justify-between items-center p-2 border rounded">
+                      <span>{blog.title}</span>
+                      <div className="space-x-2">
+                        <Button variant="link" onClick={() => setEditingBlog(blog)}>
+                          Edit
+                        </Button>
+                        <Button variant="destructive" onClick={() => handleDeleteBlog(blog.id)}>
+                          Delete
+                        </Button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CardContent>
+          </Card>
         </section>
 
         <section>
-          <h2 className="text-2xl font-semibold mb-4">Manage Projects</h2>
-          <ProjectForm
-            editingProject={editingProject}
-            setEditingProject={setEditingProject}
-            refreshProjects={() => fetchProjects(localStorage.getItem("token")!)}
-          />
-          <ul className="mt-4">
-            {projects.map((project) => (
-              <li key={project.id} className="flex justify-between items-center mb-2">
-                <span>{project.title}</span>
-                <div>
-                  <button onClick={() => setEditingProject(project)} className="mr-2 text-blue-500">
-                    Edit
-                  </button>
-                  <button onClick={() => handleDeleteProject(project.id)} className="text-red-500">
-                    Delete
-                  </button>
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl">Manage Projects</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ProjectForm
+                editingProject={editingProject}
+                setEditingProject={setEditingProject}
+                refreshProjects={() => fetchProjects(localStorage.getItem("token")!)}
+              />
+              {loading ? (
+                <div className="space-y-4 mt-4">
+                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="h-8 w-full" />
                 </div>
-              </li>
-            ))}
-          </ul>
+              ) : (
+                <ul className="mt-4 space-y-2">
+                  {projects.map((project) => (
+                    <li key={project.id} className="flex justify-between items-center p-2 border rounded">
+                      <span>{project.title}</span>
+                      <div className="space-x-2">
+                        <Button variant="link" onClick={() => setEditingProject(project)}>
+                          Edit
+                        </Button>
+                        <Button variant="destructive" onClick={() => handleDeleteProject(project.id)}>
+                          Delete
+                        </Button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CardContent>
+          </Card>
         </section>
       </main>
       <Footer />
