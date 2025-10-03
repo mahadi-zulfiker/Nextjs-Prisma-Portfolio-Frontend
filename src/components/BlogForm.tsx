@@ -83,7 +83,7 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
         method,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({ title, content: editor.getHTML() }),
       });
@@ -92,9 +92,10 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
       setTitle("");
       editor?.commands.clearContent();
       setEditingBlog(null);
-      refreshBlogs();
+      refreshBlogs(); // Refresh the blogs list after successful submission
     } catch (error) {
       toast.error("Error saving blog");
+      console.error("Error saving blog:", error);
     } finally {
       setIsSubmitting(false);
     }
