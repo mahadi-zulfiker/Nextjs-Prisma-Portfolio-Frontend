@@ -16,7 +16,7 @@ interface Project {
   title: string;
   thumbnail?: string;
   description: string;
-  features: string[];
+  features: string[] | string; // Accept both array and string
   liveLink?: string;
   repoLink?: string;
   createdAt: string;
@@ -31,11 +31,37 @@ interface ProjectFormProps {
 export default function ProjectForm({ editingProject, setEditingProject, refreshProjects }: ProjectFormProps) {
   const [title, setTitle] = useState(editingProject?.title || "");
   const [thumbnail, setThumbnail] = useState(editingProject?.thumbnail || "");
-  const [features, setFeatures] = useState(editingProject?.features?.join(", ") || "");
+  const [features, setFeatures] = useState("");
   const [liveLink, setLiveLink] = useState(editingProject?.liveLink || "");
   const [repoLink, setRepoLink] = useState(editingProject?.repoLink || "");
   const [isMounted, setIsMounted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Update form state when editingProject changes
+  useEffect(() => {
+    if (editingProject) {
+      setTitle(editingProject.title || "");
+      setThumbnail(editingProject.thumbnail || "");
+      
+      // Handle features whether they're an array or string
+      if (Array.isArray(editingProject.features)) {
+        setFeatures(editingProject.features.join(", "));
+      } else if (typeof editingProject.features === 'string') {
+        setFeatures(editingProject.features);
+      } else {
+        setFeatures("");
+      }
+      
+      setLiveLink(editingProject.liveLink || "");
+      setRepoLink(editingProject.repoLink || "");
+    } else {
+      setTitle("");
+      setThumbnail("");
+      setFeatures("");
+      setLiveLink("");
+      setRepoLink("");
+    }
+  }, [editingProject]);
 
   // Prevent SSR by only initializing editor on client
   useEffect(() => {
@@ -52,6 +78,15 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
     },
     immediatelyRender: false, // Explicitly disable SSR rendering
   });
+
+  // Update editor content when editingProject changes
+  useEffect(() => {
+    if (editor && editingProject) {
+      editor.commands.setContent(editingProject.description || "");
+    } else if (editor) {
+      editor.commands.clearContent();
+    }
+  }, [editor, editingProject]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -30,6 +30,15 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
   const [isMounted, setIsMounted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Update form state when editingBlog changes
+  useEffect(() => {
+    if (editingBlog) {
+      setTitle(editingBlog.title || "");
+    } else {
+      setTitle("");
+    }
+  }, [editingBlog]);
+
   // Prevent SSR by only initializing editor on client
   useEffect(() => {
     setIsMounted(true);
@@ -45,6 +54,15 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
     },
     immediatelyRender: false, // Explicitly disable SSR rendering
   });
+
+  // Update editor content when editingBlog changes
+  useEffect(() => {
+    if (editor && editingBlog) {
+      editor.commands.setContent(editingBlog.content || "");
+    } else if (editor) {
+      editor.commands.clearContent();
+    }
+  }, [editor, editingBlog]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

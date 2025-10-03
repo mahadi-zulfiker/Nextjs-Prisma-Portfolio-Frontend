@@ -26,7 +26,7 @@ interface Project {
   title: string;
   thumbnail?: string;
   description: string;
-  features: string[];
+  features: string[] | string; // Accept both array and string
   liveLink?: string;
   repoLink?: string;
   createdAt: string;
