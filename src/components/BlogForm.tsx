@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { cn } from "@/lib/utils";
+import { Save, FileText, X } from "lucide-react";
 
 interface Blog {
   id: number;
@@ -39,7 +40,7 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
     content: editingBlog?.content || "",
     editorProps: {
       attributes: {
-        class: 'prose focus:outline-none min-h-[200px] p-4 border rounded-lg transition-colors duration-300 focus:border-primary',
+        class: 'prose focus:outline-none min-h-[200px] p-4 border rounded-lg transition-colors duration-300 focus:border-primary dark:prose-invert bg-background',
       },
     },
     immediatelyRender: false, // Explicitly disable SSR rendering
@@ -88,7 +89,10 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 animate-fadeIn">
       <div className="space-y-2">
-        <Label htmlFor="title" className="text-lg font-medium">Title</Label>
+        <Label htmlFor="title" className="text-lg font-medium flex items-center gap-2">
+          <FileText className="h-4 w-4" />
+          Title
+        </Label>
         <Input
           id="title"
           value={title}
@@ -111,7 +115,7 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
         <Button 
           type="submit" 
           disabled={isSubmitting}
-          className="rounded-full px-6 transition-all duration-300 hover:scale-105"
+          className="rounded-full px-6 transition-all duration-300 hover:scale-105 group"
         >
           {isSubmitting ? (
             <>
@@ -119,7 +123,10 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
               {editingBlog ? "Updating..." : "Creating..."}
             </>
           ) : (
-            editingBlog ? "Update Blog" : "Create Blog"
+            <>
+              <Save className="mr-2 h-4 w-4 group-hover:rotate-12 transition-transform" />
+              {editingBlog ? "Update Blog" : "Create Blog"}
+            </>
           )}
         </Button>
         {editingBlog && (

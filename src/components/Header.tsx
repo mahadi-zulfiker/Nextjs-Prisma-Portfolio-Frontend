@@ -4,10 +4,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { Menu, X } from "lucide-react";
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setIsLoggedIn(!!localStorage.getItem("token"));
@@ -19,6 +22,15 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const navItems = [
+    { href: "/", label: "Home" },
+    { href: "/about", label: "About" },
+    { href: "/projects", label: "Projects" },
+    { href: "/blogs", label: "Blogs" },
+    { href: "/contact", label: "Contact" },
+    { href: isLoggedIn ? "/dashboard" : "/login", label: isLoggedIn ? "Dashboard" : "Login" }
+  ];
 
   return (
     <header className={cn(
@@ -32,26 +44,54 @@ export default function Header() {
         >
           Portfolio
         </Link>
-        <ul className="flex space-x-1 md:space-x-2">
-          {[
-            { href: "/", label: "Home" },
-            { href: "/about", label: "About" },
-            { href: "/projects", label: "Projects" },
-            { href: "/blogs", label: "Blogs" },
-            { href: isLoggedIn ? "/dashboard" : "/login", label: isLoggedIn ? "Dashboard" : "Login" }
-          ].map((item) => (
-            <li key={item.href}>
+        
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center space-x-1">
+          {navItems.map((item) => (
+            <Button 
+              key={item.href}
+              variant="ghost" 
+              asChild
+              className="text-foreground/80 hover:text-foreground hover:bg-accent/50 rounded-full px-3 md:px-4 transition-colors"
+            >
+              <Link href={item.href}>{item.label}</Link>
+            </Button>
+          ))}
+          <ThemeToggle />
+        </div>
+        
+        {/* Mobile Navigation */}
+        <div className="flex md:hidden items-center">
+          <ThemeToggle />
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="ml-2 rounded-full"
+          >
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+        </div>
+      </nav>
+      
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-background border-t border-border/50">
+          <div className="container mx-auto px-4 py-3 flex flex-col space-y-2">
+            {navItems.map((item) => (
               <Button 
+                key={item.href}
                 variant="ghost" 
                 asChild
-                className="text-foreground/80 hover:text-foreground hover:bg-accent/50 rounded-full px-3 md:px-4"
+                className="justify-start text-foreground/80 hover:text-foreground hover:bg-accent/50 rounded-full px-4 py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
               >
                 <Link href={item.href}>{item.label}</Link>
               </Button>
-            </li>
-          ))}
-        </ul>
-      </nav>
+            ))}
+          </div>
+        </div>
+      )}
     </header>
   );
 }

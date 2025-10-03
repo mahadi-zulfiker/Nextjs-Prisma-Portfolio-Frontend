@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { ArrowLeft, LogOut, FileText, Code, BarChart3, Lightbulb } from "lucide-react";
 
 interface Blog {
   id: number;
@@ -113,24 +114,32 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background transition-colors duration-300">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-24">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <div>
-            <h1 className="text-4xl font-bold">Dashboard</h1>
-            <p className="text-muted-foreground">Manage your content and portfolio</p>
+          <div className="flex items-center">
+            <Button asChild variant="ghost" className="rounded-full p-2 mr-2">
+              <button onClick={() => router.back()}>
+                <ArrowLeft className="h-5 w-5" />
+              </button>
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold">Dashboard</h1>
+              <p className="text-muted-foreground">Manage your content and portfolio</p>
+            </div>
           </div>
-          <Button variant="destructive" onClick={handleLogout} className="rounded-full">
+          <Button variant="destructive" onClick={handleLogout} className="rounded-full group">
+            <LogOut className="mr-2 h-4 w-4 group-hover:rotate-180 transition-transform" />
             Logout
           </Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
-            <Card className="shadow-card rounded-xl">
+            <Card className="shadow-card rounded-xl border-border/50">
               <CardHeader className="pb-4">
-                <div className="flex border-b">
+                <div className="flex border-b border-border">
                   <Button
                     variant="ghost"
                     className={cn(
@@ -141,6 +150,7 @@ export default function Dashboard() {
                     )}
                     onClick={() => setActiveTab("blogs")}
                   >
+                    <FileText className="mr-2 h-4 w-4" />
                     Blogs
                   </Button>
                   <Button
@@ -153,6 +163,7 @@ export default function Dashboard() {
                     )}
                     onClick={() => setActiveTab("projects")}
                   >
+                    <Code className="mr-2 h-4 w-4" />
                     Projects
                   </Button>
                 </div>
@@ -165,7 +176,7 @@ export default function Dashboard() {
                       setEditingBlog={setEditingBlog}
                       refreshBlogs={() => fetchBlogs(localStorage.getItem("token")!)}
                     />
-                    <div className="border-t pt-6">
+                    <div className="border-t border-border pt-6">
                       <h3 className="text-lg font-semibold mb-4">Your Blogs</h3>
                       {loading ? (
                         <div className="space-y-4">
@@ -175,6 +186,7 @@ export default function Dashboard() {
                         </div>
                       ) : blogs.length === 0 ? (
                         <div className="text-center py-8 text-muted-foreground">
+                          <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground/20" />
                           <p>No blogs created yet</p>
                         </div>
                       ) : (
@@ -182,7 +194,7 @@ export default function Dashboard() {
                           {blogs.map((blog) => (
                             <li 
                               key={blog.id} 
-                              className="flex justify-between items-center p-4 border rounded-lg hover:bg-accent transition-colors animate-fadeIn"
+                              className="flex justify-between items-center p-4 border border-border rounded-lg hover:bg-accent transition-colors animate-fadeIn"
                             >
                               <div className="flex-1 min-w-0">
                                 <h4 className="font-medium truncate">{blog.title}</h4>
@@ -221,7 +233,7 @@ export default function Dashboard() {
                       setEditingProject={setEditingProject}
                       refreshProjects={() => fetchProjects(localStorage.getItem("token")!)}
                     />
-                    <div className="border-t pt-6">
+                    <div className="border-t border-border pt-6">
                       <h3 className="text-lg font-semibold mb-4">Your Projects</h3>
                       {loading ? (
                         <div className="space-y-4">
@@ -231,6 +243,7 @@ export default function Dashboard() {
                         </div>
                       ) : projects.length === 0 ? (
                         <div className="text-center py-8 text-muted-foreground">
+                          <Code className="h-12 w-12 mx-auto mb-4 text-muted-foreground/20" />
                           <p>No projects created yet</p>
                         </div>
                       ) : (
@@ -238,7 +251,7 @@ export default function Dashboard() {
                           {projects.map((project) => (
                             <li 
                               key={project.id} 
-                              className="flex justify-between items-center p-4 border rounded-lg hover:bg-accent transition-colors animate-fadeIn"
+                              className="flex justify-between items-center p-4 border border-border rounded-lg hover:bg-accent transition-colors animate-fadeIn"
                             >
                               <div className="flex-1 min-w-0">
                                 <h4 className="font-medium truncate">{project.title}</h4>
@@ -276,17 +289,20 @@ export default function Dashboard() {
           </div>
           
           <div className="space-y-8">
-            <Card className="shadow-card rounded-xl">
+            <Card className="shadow-card rounded-xl border-border/50">
               <CardHeader>
-                <CardTitle className="text-xl">Quick Stats</CardTitle>
+                <div className="flex items-center gap-3">
+                  <BarChart3 className="h-5 w-5 text-primary" />
+                  <CardTitle className="text-xl">Quick Stats</CardTitle>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-primary/5 p-4 rounded-lg text-center">
+                  <div className="bg-primary/5 p-4 rounded-lg text-center border border-primary/10">
                     <p className="text-2xl font-bold">{blogs.length}</p>
                     <p className="text-sm text-muted-foreground">Blogs</p>
                   </div>
-                  <div className="bg-accent p-4 rounded-lg text-center">
+                  <div className="bg-accent p-4 rounded-lg text-center border border-accent/30">
                     <p className="text-2xl font-bold">{projects.length}</p>
                     <p className="text-sm text-muted-foreground">Projects</p>
                   </div>
@@ -294,23 +310,30 @@ export default function Dashboard() {
               </CardContent>
             </Card>
             
-            <Card className="shadow-card rounded-xl">
+            <Card className="shadow-card rounded-xl border-border/50">
               <CardHeader>
-                <CardTitle className="text-xl">Tips</CardTitle>
+                <div className="flex items-center gap-3">
+                  <Lightbulb className="h-5 w-5 text-primary" />
+                  <CardTitle className="text-xl">Tips</CardTitle>
+                </div>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2 text-sm">
+                <ul className="space-y-3 text-sm">
                   <li className="flex items-start">
-                    <span className="text-primary mr-2">•</span>
+                    <span className="text-primary mr-2 mt-1">•</span>
                     <span>Keep your blog titles concise and engaging</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-primary mr-2">•</span>
+                    <span className="text-primary mr-2 mt-1">•</span>
                     <span>Add high-quality images to your projects</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-primary mr-2">•</span>
+                    <span className="text-primary mr-2 mt-1">•</span>
                     <span>Regularly update your portfolio content</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2 mt-1">•</span>
+                    <span>Use descriptive meta tags for SEO</span>
                   </li>
                 </ul>
               </CardContent>

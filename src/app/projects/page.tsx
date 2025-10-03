@@ -1,6 +1,9 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectsCard";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Code } from "lucide-react";
+import Link from "next/link";
 
 async function getProjects() {
   try {
@@ -45,15 +48,24 @@ export default async function Projects() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background transition-colors duration-300">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-24">
+        <div className="flex items-center mb-8">
+          <Button asChild variant="ghost" className="rounded-full p-2 mr-2">
+            <Link href="/">
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+          </Button>
+          <h1 className="text-3xl md:text-4xl font-bold">My Projects</h1>
+        </div>
+        
         <div className="text-center mb-16 animate-fadeIn">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">My Projects</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Explore my latest creations and innovations in web development and design.
           </p>
         </div>
+        
         {projects && projects.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project: Project) => (
@@ -61,9 +73,15 @@ export default async function Projects() {
             ))}
           </div>
         ) : (
-          <div className="text-center">
+          <div className="text-center py-16">
+            <div className="bg-accent/10 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+              <Code className="h-12 w-12 text-primary" />
+            </div>
             <h2 className="text-2xl font-semibold mb-4">No projects available yet</h2>
-            <p className="text-muted-foreground">Check back soon for updates!</p>
+            <p className="text-muted-foreground mb-6">Check back soon for updates!</p>
+            <Button asChild variant="outline" className="rounded-full">
+              <Link href="/">Back to Home</Link>
+            </Button>
           </div>
         )}
       </main>

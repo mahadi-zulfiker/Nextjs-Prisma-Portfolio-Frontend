@@ -3,8 +3,8 @@ import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge"; // Added for skill badges
-import { LucideIcon, Mail, Linkedin, Github } from "lucide-react"; // Added icons for better UX
+import { Badge } from "@/components/ui/badge";
+import { Mail, Linkedin, Github, ArrowLeft, User, Code, Briefcase, Award } from "lucide-react";
 
 export default function About() {
   const skills = [
@@ -14,11 +14,19 @@ export default function About() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-background/50 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-background transition-colors duration-300">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-24 md:py-32">
+        <div className="flex items-center mb-8">
+          <Button asChild variant="ghost" className="rounded-full p-2 mr-2">
+            <Link href="/">
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+          </Button>
+          <h1 className="text-3xl md:text-4xl font-bold">About Me</h1>
+        </div>
+        
         <div className="text-center mb-16 animate-fadeIn">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">About Me</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Passionate full-stack developer with expertise in modern web technologies. Crafting elegant solutions for complex problems.
           </p>
@@ -27,7 +35,12 @@ export default function About() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
           <Card className="shadow-xl rounded-2xl lg:col-span-2 animate-slideIn border border-border/50 hover:shadow-2xl transition-all duration-300 bg-card/80 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="text-3xl">Who I Am</CardTitle>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 rounded-full bg-primary/10">
+                  <User className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="text-3xl">Who I Am</CardTitle>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="prose max-w-none dark:prose-invert text-lg space-y-4">
@@ -39,18 +52,32 @@ export default function About() {
                   My approach combines technical expertise with creative problem-solving to deliver exceptional digital experiences. 
                   I believe in writing clean, maintainable code and staying up-to-date with the latest industry trends.
                 </p>
+                <div className="grid grid-cols-2 gap-4 mt-6">
+                  <div className="bg-primary/5 p-4 rounded-lg">
+                    <h3 className="font-semibold text-lg mb-1">5+</h3>
+                    <p className="text-muted-foreground text-sm">Years Experience</p>
+                  </div>
+                  <div className="bg-accent/10 p-4 rounded-lg">
+                    <h3 className="font-semibold text-lg mb-1">50+</h3>
+                    <p className="text-muted-foreground text-sm">Projects Completed</p>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
           
           <Card className="shadow-xl rounded-2xl animate-slideIn border border-border/50 hover:shadow-2xl transition-all duration-300 bg-card/80 backdrop-blur-sm" style={{ animationDelay: '0.1s' }}>
             <CardHeader>
-              <CardTitle className="text-3xl">Contact</CardTitle>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 rounded-full bg-primary/10">
+                  <Mail className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="text-3xl">Contact</CardTitle>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-semibold text-xl mb-2">Get in Touch</h3>
                   <p className="text-muted-foreground mb-4">Feel free to reach out for collaborations or just a friendly hello</p>
                 </div>
                 <div className="space-y-4">
@@ -83,7 +110,12 @@ export default function About() {
           {skills.map((skillGroup, index) => (
             <Card key={skillGroup.category} className="shadow-xl rounded-2xl animate-slideIn border border-border/50 hover:shadow-2xl transition-all duration-300 bg-card/80 backdrop-blur-sm" style={{ animationDelay: `${0.1 * index}s` }}>
               <CardHeader>
-                <CardTitle className="text-2xl">{skillGroup.category}</CardTitle>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 rounded-full bg-primary/10">
+                    <Code className="h-5 w-5 text-primary" />
+                  </div>
+                  <CardTitle className="text-2xl">{skillGroup.category}</CardTitle>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
@@ -100,11 +132,16 @@ export default function About() {
         
         <Card className="shadow-xl rounded-2xl mb-16 animate-fadeIn border border-border/50 hover:shadow-2xl transition-all duration-300 bg-card/80 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-3xl">Work Experience</CardTitle>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-3 rounded-full bg-primary/10">
+                <Briefcase className="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle className="text-3xl">Work Experience</CardTitle>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-8">
-              <div className="relative pl-6 before:absolute before:left-2 before:top-0 before:bottom-0 before:w-0.5 before:bg-primary/20">
+              <div className="relative pl-8 before:absolute before:left-4 before:top-0 before:bottom-0 before:w-0.5 before:bg-primary/20">
                 <div className="relative before:absolute before:-left-[13px] before:top-2 before:w-3 before:h-3 before:rounded-full before:bg-primary">
                   <h3 className="text-2xl font-semibold">Senior Developer</h3>
                   <p className="text-primary font-medium">TechCorp (2020 - Present)</p>
@@ -114,7 +151,7 @@ export default function About() {
                   </p>
                 </div>
               </div>
-              <div className="relative pl-6 before:absolute before:left-2 before:top-0 before:bottom-0 before:w-0.5 before:bg-primary/20">
+              <div className="relative pl-8 before:absolute before:left-4 before:top-0 before:bottom-0 before:w-0.5 before:bg-primary/20">
                 <div className="relative before:absolute before:-left-[13px] before:top-2 before:w-3 before:h-3 before:rounded-full before:bg-primary">
                   <h3 className="text-2xl font-semibold">Freelance Developer</h3>
                   <p className="text-primary font-medium">Self-employed (2018 - 2020)</p>

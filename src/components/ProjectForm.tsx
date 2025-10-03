@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { cn } from "@/lib/utils";
+import { Save, Image as ImageIcon, Link, Code, X } from "lucide-react";
 
 interface Project {
   id: number;
@@ -46,7 +47,7 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
     content: editingProject?.description || "",
     editorProps: {
       attributes: {
-        class: 'prose focus:outline-none min-h-[150px] p-4 border rounded-lg transition-colors duration-300 focus:border-primary',
+        class: 'prose focus:outline-none min-h-[150px] p-4 border rounded-lg transition-colors duration-300 focus:border-primary dark:prose-invert bg-background',
       },
     },
     immediatelyRender: false, // Explicitly disable SSR rendering
@@ -108,7 +109,10 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
   return (
     <form onSubmit={handleSubmit} className="space-y-6 animate-fadeIn">
       <div className="space-y-2">
-        <Label htmlFor="title" className="text-lg font-medium">Title</Label>
+        <Label htmlFor="title" className="text-lg font-medium flex items-center gap-2">
+          <Code className="h-4 w-4" />
+          Title
+        </Label>
         <Input
           id="title"
           value={title}
@@ -120,14 +124,42 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="thumbnail" className="text-lg font-medium">Thumbnail URL</Label>
-        <Input
-          id="thumbnail"
-          value={thumbnail}
-          onChange={(e) => setThumbnail(e.target.value)}
-          className="py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50"
-          placeholder="https://example.com/image.jpg"
-        />
+        <Label htmlFor="thumbnail" className="text-lg font-medium flex items-center gap-2">
+          <ImageIcon className="h-4 w-4" />
+          Thumbnail URL
+        </Label>
+        <div className="flex gap-2">
+          <Input
+            id="thumbnail"
+            value={thumbnail}
+            onChange={(e) => setThumbnail(e.target.value)}
+            className="py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50 flex-1"
+            placeholder="https://example.com/image.jpg"
+          />
+          {thumbnail && (
+            <Button 
+              type="button" 
+              variant="outline" 
+              size="icon"
+              onClick={() => setThumbnail("")}
+              className="rounded-full"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+        {thumbnail && (
+          <div className="mt-2 relative w-full h-32 rounded-lg overflow-hidden border border-border">
+            <img 
+              src={thumbnail} 
+              alt="Thumbnail preview" 
+              className="object-cover w-full h-full"
+              onError={(e) => {
+                e.currentTarget.src = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=400&q=80";
+              }}
+            />
+          </div>
+        )}
       </div>
       
       <div className="space-y-2">
@@ -153,7 +185,10 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="liveLink" className="text-lg font-medium">Live Link</Label>
+          <Label htmlFor="liveLink" className="text-lg font-medium flex items-center gap-2">
+            <Link className="h-4 w-4" />
+            Live Link
+          </Label>
           <Input
             id="liveLink"
             value={liveLink}
@@ -164,7 +199,10 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="repoLink" className="text-lg font-medium">Repository Link</Label>
+          <Label htmlFor="repoLink" className="text-lg font-medium flex items-center gap-2">
+            <Code className="h-4 w-4" />
+            Repository Link
+          </Label>
           <Input
             id="repoLink"
             value={repoLink}
@@ -179,7 +217,7 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
         <Button 
           type="submit" 
           disabled={isSubmitting}
-          className="rounded-full px-6 transition-all duration-300 hover:scale-105"
+          className="rounded-full px-6 transition-all duration-300 hover:scale-105 group"
         >
           {isSubmitting ? (
             <>
@@ -187,7 +225,10 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
               {editingProject ? "Updating..." : "Creating..."}
             </>
           ) : (
-            editingProject ? "Update Project" : "Create Project"
+            <>
+              <Save className="mr-2 h-4 w-4 group-hover:rotate-12 transition-transform" />
+              {editingProject ? "Update Project" : "Create Project"}
+            </>
           )}
         </Button>
         {editingProject && (

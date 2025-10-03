@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, LogIn, Mail, Lock } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email"),
@@ -27,6 +28,7 @@ export default function Login() {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,63 +78,117 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background transition-colors duration-100 py-8">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-12 flex items-center justify-center">
-        <Card className="w-full max-w-md shadow-card rounded-xl animate-fadeIn">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl">Welcome Back</CardTitle>
-            <p className="text-muted-foreground">Sign in to your account</p>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-lg font-medium">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50"
-                  placeholder="Enter your email"
-                />
+        <div className="w-full max-w-md">
+          <div className="flex items-center mb-6">
+            <Button asChild variant="ghost" className="rounded-full p-2 mr-2">
+              <button onClick={() => router.back()}>
+                <ArrowLeft className="h-5 w-5" />
+              </button>
+            </Button>
+            <h1 className="text-2xl font-bold">Login to Dashboard</h1>
+          </div>
+          
+          <Card className="w-full shadow-card rounded-2xl animate-fadeIn border-border/50 overflow-hidden">
+            <div className="bg-gradient-to-r from-primary/10 to-accent/10 p-6 text-center">
+              <div className="mx-auto bg-primary p-3 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                <LogIn className="h-8 w-8 text-primary-foreground" />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-lg font-medium">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  className="py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50"
-                  placeholder="Enter your password"
-                />
-              </div>
-              <Button 
-                type="submit" 
-                disabled={isLoading}
-                className="w-full py-6 rounded-full text-lg transition-all duration-300 hover:scale-105"
-              >
-                {isLoading ? (
-                  <>
-                    <span className="mr-2 h-4 w-4 animate-spin">⏳</span>
-                    Signing in...
-                  </>
-                ) : (
-                  "Sign In"
-                )}
-              </Button>
-            </form>
-            
-            <div className="mt-6 text-center">
-              <p className="text-muted-foreground">
-                Default credentials: admin@example.com / password123
-              </p>
+              <CardTitle className="text-2xl">Welcome Back</CardTitle>
+              <p className="text-muted-foreground mt-2">Sign in to your account</p>
             </div>
-          </CardContent>
-        </Card>
+            
+            <CardContent className="pt-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-lg font-medium flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    Email
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50 pl-12"
+                      placeholder="Enter your email"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-lg font-medium flex items-center gap-2">
+                    <Lock className="h-4 w-4" />
+                    Password
+                  </Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      className="py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50 pl-12"
+                      placeholder="Enter your password"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? "🙈" : "👁️"}
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="remember"
+                      className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                    />
+                    <label htmlFor="remember" className="ml-2 text-sm text-muted-foreground">
+                      Remember me
+                    </label>
+                  </div>
+                </div>
+                
+                <Button 
+                  type="submit" 
+                  disabled={isLoading}
+                  className="w-full py-6 rounded-full text-lg transition-all duration-300 hover:scale-105 group"
+                >
+                  {isLoading ? (
+                    <>
+                      <span className="mr-2 h-4 w-4 animate-spin">⏳</span>
+                      Signing in...
+                    </>
+                  ) : (
+                    <>
+                      Sign In
+                      <LogIn className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </Button>
+              </form>
+              
+              <div className="mt-6 text-center">
+                <p className="text-muted-foreground text-xs mt-4">
+                  Default credentials: admin@example.com / password123
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </main>
       <Footer />
     </div>
