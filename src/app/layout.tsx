@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "My Portfolio",
-  description: "Personal portfolio showcasing projects and blogs",
+  title: "Mahadi Zulfiker - Full Stack Developer",
+  description: "Full-Stack Developer specializing in the MERN stack, building responsive, scalable web applications.",
 };
 
 export default function RootLayout({

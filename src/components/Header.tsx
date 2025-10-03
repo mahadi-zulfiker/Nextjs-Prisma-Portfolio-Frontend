@@ -42,7 +42,7 @@ export default function Header() {
           href="/" 
           className="text-2xl font-bold gradient-text"
         >
-          Portfolio
+          Mahadi Zulfiker
         </Link>
         
         {/* Desktop Navigation */}

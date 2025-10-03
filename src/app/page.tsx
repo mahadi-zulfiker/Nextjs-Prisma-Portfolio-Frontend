@@ -14,15 +14,15 @@ export default function Home() {
         {/* Hero Section */}
         <section className="text-center mb-24 animate-fadeIn">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
-            Welcome to My Portfolio
+            Hi, I'm Mahadi Zulfiker
           </h1>
           <p className="text-xl md:text-2xl mb-10 text-muted-foreground max-w-3xl mx-auto">
-            Showcasing innovative projects, insightful blogs, and my journey in tech.
+            Full-Stack Developer specializing in the MERN stack, building responsive, scalable web applications.
           </p>
           <div className="flex justify-center mb-12">
             <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-primary/20 shadow-card">
               <Image
-                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80"
+                src="https://i.ibb.co.com/LXQ6FzDJ/Mahadi-Pro.jpg"
                 alt="Profile Picture"
                 fill
                 className="object-cover"
@@ -53,7 +53,7 @@ export default function Home() {
               <CardTitle className="text-2xl">About Me</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="mb-6">Discover my background, skills, and passions.</p>
+              <p className="mb-6">Learn about my journey, skills, and experience as a Full-Stack Developer.</p>
               <Button variant="outline" asChild className="rounded-full group">
                 <Link href="/about">
                   Learn More
@@ -71,7 +71,7 @@ export default function Home() {
               <CardTitle className="text-2xl">Projects</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="mb-6">View my latest creations and innovations.</p>
+              <p className="mb-6">Explore my projects built with the MERN stack and modern technologies.</p>
               <Button variant="outline" asChild className="rounded-full group">
                 <Link href="/projects">
                   View Projects
@@ -89,7 +89,7 @@ export default function Home() {
               <CardTitle className="text-2xl">Blogs</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="mb-6">Read my thoughts on tech and development.</p>
+              <p className="mb-6">Read articles about web development, programming, and tech insights.</p>
               <Button variant="outline" asChild className="rounded-full group">
                 <Link href="/blogs">
                   Read Blogs
@@ -104,7 +104,7 @@ export default function Home() {
         <section className="text-center py-16 bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl mb-24">
           <h2 className="text-3xl font-bold mb-4">Let&apos;s Connect</h2>
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Interested in working together or have questions? Feel free to reach out!
+            Have a project in mind or want to discuss opportunities? Let's connect!
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button asChild variant="outline" size="lg" className="rounded-full">
