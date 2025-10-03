@@ -53,7 +53,7 @@ export default function Dashboard() {
 
   const fetchBlogs = async (token: string) => {
     try {
-      const res = await fetch("http://localhost:5000/api/blogs", {
+      const res = await fetch("https://next-prisma-portfolio-backend.vercel.app/api/blogs", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch blogs");
@@ -65,7 +65,7 @@ export default function Dashboard() {
 
   const fetchProjects = async (token: string) => {
     try {
-      const res = await fetch("http://localhost:5000/api/projects", {
+      const res = await fetch("https://next-prisma-portfolio-backend.vercel.app/api/projects", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch projects");
@@ -79,7 +79,7 @@ export default function Dashboard() {
     if (!confirm("Are you sure you want to delete this blog?")) return;
     try {
       const token = localStorage.getItem("token")!;
-      const res = await fetch(`http://localhost:5000/api/blogs/${id}`, {
+      const res = await fetch(`https://next-prisma-portfolio-backend.vercel.app/api/blogs/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -95,7 +95,7 @@ export default function Dashboard() {
     if (!confirm("Are you sure you want to delete this project?")) return;
     try {
       const token = localStorage.getItem("token")!;
-      const res = await fetch(`http://localhost:5000/api/projects/${id}`, {
+      const res = await fetch(`https://next-prisma-portfolio-backend.vercel.app/api/projects/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

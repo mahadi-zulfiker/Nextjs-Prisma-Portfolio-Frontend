@@ -11,7 +11,7 @@ type Blog = {
 
 export async function generateStaticParams() {
   try {
-    const res = await fetch("http://localhost:5000/api/blogs");
+    const res = await fetch("https://next-prisma-portfolio-backend.vercel.app/api/blogs");
     if (!res.ok) {
       console.error("Failed to fetch blogs for static params:", res.status);
       return [];
@@ -28,7 +28,7 @@ export async function generateStaticParams() {
 
 async function getBlog(slug: string) {
   try {
-    const res = await fetch(`http://localhost:5000/api/blogs/${slug}`, {
+    const res = await fetch(`https://next-prisma-portfolio-backend.vercel.app/api/blogs/${slug}`, {
       next: { revalidate: 3600 }, // ISR
     });
     if (!res.ok) {

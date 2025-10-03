@@ -58,8 +58,8 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
     try {
       const token = localStorage.getItem("token")!;
       const url = editingBlog
-        ? `http://localhost:5000/api/blogs/${editingBlog.id}`
-        : "http://localhost:5000/api/blogs";
+        ? `https://next-prisma-portfolio-backend.vercel.app/api/blogs/${editingBlog.id}`
+        : "https://next-prisma-portfolio-backend.vercel.app/api/blogs";
       const method = editingBlog ? "PUT" : "POST";
       const res = await fetch(url, {
         method,

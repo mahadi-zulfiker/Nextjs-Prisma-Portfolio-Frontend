@@ -7,7 +7,7 @@ import Link from "next/link";
 
 async function getProjects() {
   try {
-    const res = await fetch("http://localhost:5000/api/projects", {
+    const res = await fetch("https://next-prisma-portfolio-backend.vercel.app/api/projects", {
       next: { revalidate: 3600 }, // ISR every hour
       headers: {
         'Content-Type': 'application/json',

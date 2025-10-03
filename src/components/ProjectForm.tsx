@@ -74,8 +74,8 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
     try {
       const token = localStorage.getItem("token")!;
       const url = editingProject
-        ? `http://localhost:5000/api/projects/${editingProject.id}`
-        : "http://localhost:5000/api/projects";
+        ? `https://next-prisma-portfolio-backend.vercel.app/api/projects/${editingProject.id}`
+        : "https://next-prisma-portfolio-backend.vercel.app/api/projects";
       const method = editingProject ? "PUT" : "POST";
       const res = await fetch(url, {
         method,
