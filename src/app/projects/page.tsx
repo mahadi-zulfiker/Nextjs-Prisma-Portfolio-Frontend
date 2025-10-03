@@ -25,8 +25,18 @@ async function getProjects() {
   }
 }
 
+interface Project {
+  id: number;
+  title: string;
+  thumbnail?: string;
+  description: string;
+  features: string[];
+  liveLink?: string;
+  repoLink?: string;
+}
+
 export default async function Projects() {
-  let projects = [];
+  let projects: Project[] = [];
   
   try {
     projects = await getProjects();
@@ -44,17 +54,16 @@ export default async function Projects() {
             Explore my latest creations and innovations in web development and design.
           </p>
         </div>
-        
-        {projects && projects.length === 0 ? (
-          <div className="text-center py-16">
-            <h2 className="text-2xl font-semibold mb-4">No projects available yet</h2>
-            <p className="text-muted-foreground">Check back soon for updates!</p>
-          </div>
-        ) : (
+        {projects && projects.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects && projects.map((project: any) => (
+            {projects.map((project: Project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
+          </div>
+        ) : (
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold mb-4">No projects available yet</h2>
+            <p className="text-muted-foreground">Check back soon for updates!</p>
           </div>
         )}
       </main>

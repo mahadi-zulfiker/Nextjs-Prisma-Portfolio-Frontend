@@ -62,11 +62,13 @@ export default function Login() {
       localStorage.setItem("token", token);
       toast.success("Logged in successfully");
       router.push("/dashboard");
-    } catch (error: any) {
-      if (error.name === "ZodError") {
-        toast.error(error.errors[0].message);
-      } else {
+    } catch (error: unknown) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.issues[0].message);
+      } else if (error instanceof Error) {
         toast.error(error.message || "Login failed");
+      } else {
+        toast.error("Login failed");
       }
     } finally {
       setIsLoading(false);

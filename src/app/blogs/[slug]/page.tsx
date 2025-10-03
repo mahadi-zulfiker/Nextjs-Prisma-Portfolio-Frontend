@@ -2,6 +2,13 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+type Blog = {
+  slug: string;
+  title: string;
+  content: string;
+  createdAt: string;
+};
+
 export async function generateStaticParams() {
   try {
     const res = await fetch("http://localhost:5000/api/blogs");
@@ -9,8 +16,8 @@ export async function generateStaticParams() {
       console.error("Failed to fetch blogs for static params:", res.status);
       return [];
     }
-    const blogs = await res.json();
-    return blogs.map((blog: any) => ({
+    const blogs: Blog[] = await res.json();
+    return blogs.map((blog) => ({
       slug: blog.slug,
     }));
   } catch (error) {

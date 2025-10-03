@@ -71,7 +71,7 @@ export default function Home() {
         </section>
         
         <section className="text-center py-16 bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl">
-          <h2 className="text-3xl font-bold mb-4">Let's Connect</h2>
+          <h2 className="text-3xl font-bold mb-4">Let us Connect</h2>
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
             Interested in working together or have questions? Feel free to reach out!
           </p>

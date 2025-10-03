@@ -1,33 +1,128 @@
 /* ===== src\app\about\page.tsx ===== */
-/* ===== app/about/page.tsx ===== */
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function About() {
+  const skills = [
+    { category: "Frontend", items: ["Next.js & React", "TypeScript & JavaScript", "Tailwind CSS & Shadcn/UI"] },
+    { category: "Backend", items: ["Express.js & Node.js", "Prisma ORM & PostgreSQL"] },
+    { category: "Tools", items: ["Git & GitHub", "AWS & Deployment", "Figma & Design"] }
+  ];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">About Me</h1>
-        <section className="prose max-w-none">
-          <p>
-            Hi, I&apos;m [Your Name], a full-stack developer passionate about building web applications.
+      <main className="flex-1 container mx-auto px-4 py-24">
+        <div className="text-center mb-16 animate-fadeIn">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">About Me</h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Passionate full-stack developer with expertise in modern web technologies
           </p>
-          <h2>Skills</h2>
-          <ul>
-            <li>Next.js</li>
-            <li>Express.js</li>
-            <li>Prisma</li>
-            <li>Tailwind CSS</li>
-            {/* Add more */}
-          </ul>
-          <h2>Work Experience</h2>
-          <p>
-            [Describe your experience]
-          </p>
-          <h2>Contact</h2>
-          <p>Email: [your@email.com]</p>
-        </section>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+          <Card className="shadow-card rounded-xl lg:col-span-2 animate-slideIn">
+            <CardHeader>
+              <CardTitle className="text-2xl">Who I Am</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="prose max-w-none dark:prose-invert">
+                <p className="text-lg mb-4">
+                  Hi, I&apos;m John Doe, a full-stack developer with over 5 years of experience in building scalable web applications. 
+                  I&apos;m passionate about creating user-centric solutions using modern technologies.
+                </p>
+                <p className="text-lg">
+                  My approach combines technical expertise with creative problem-solving to deliver exceptional digital experiences. 
+                  I believe in writing clean, maintainable code and staying up-to-date with the latest industry trends.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="shadow-card rounded-xl animate-slideIn" style={{ animationDelay: '0.1s' }}>
+            <CardHeader>
+              <CardTitle className="text-2xl">Contact</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">Get in Touch</h3>
+                  <p className="text-muted-foreground mb-4">Feel free to reach out for collaborations or just a friendly hello</p>
+                </div>
+                <div className="space-y-2">
+                  <p className="flex items-center">
+                    <span className="font-medium mr-2">Email:</span>
+                    <span>john.doe@example.com</span>
+                  </p>
+                  <p className="flex items-center">
+                    <span className="font-medium mr-2">LinkedIn:</span>
+                    <Link href="https://linkedin.com/in/johndoe" className="text-primary hover:underline">
+                      linkedin.com/in/johndoe
+                    </Link>
+                  </p>
+                  <p className="flex items-center">
+                    <span className="font-medium mr-2">GitHub:</span>
+                    <Link href="https://github.com/johndoe" className="text-primary hover:underline">
+                      github.com/johndoe
+                    </Link>
+                  </p>
+                </div>
+                <Button asChild className="w-full rounded-full mt-4">
+                  <Link href="mailto:john.doe@example.com">Send Email</Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          {skills.map((skillGroup, index) => (
+            <Card key={skillGroup.category} className="shadow-card rounded-xl animate-slideIn" style={{ animationDelay: `${0.1 * index}s` }}>
+              <CardHeader>
+                <CardTitle className="text-xl">{skillGroup.category}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2">
+                  {skillGroup.items.map((skill, skillIndex) => (
+                    <li key={skillIndex} className="flex items-center">
+                      <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        
+        <Card className="shadow-card rounded-xl mb-16 animate-fadeIn">
+          <CardHeader>
+            <CardTitle className="text-2xl">Work Experience</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-6">
+              <div className="border-l-2 border-primary pl-4 py-1">
+                <h3 className="text-xl font-semibold">Senior Developer</h3>
+                <p className="text-primary">TechCorp (2020 - Present)</p>
+                <p className="mt-2 text-muted-foreground">
+                  Led development of multiple enterprise applications using React, Node.js, and PostgreSQL. 
+                  Mentored junior developers and implemented CI/CD pipelines.
+                </p>
+              </div>
+              <div className="border-l-2 border-primary pl-4 py-1">
+                <h3 className="text-xl font-semibold">Freelance Developer</h3>
+                <p className="text-primary">Self-employed (2018 - 2020)</p>
+                <p className="mt-2 text-muted-foreground">
+                  Built custom websites for various clients using modern web technologies. 
+                  Specialized in e-commerce solutions and responsive design.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </main>
       <Footer />
     </div>
@@ -35,34 +130,70 @@ export default function About() {
 }
 
 /* ===== src\app\blogs\page.tsx ===== */
-/* ===== app/blogs/page.tsx ===== */
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BlogCard from "@/components/BlogCard";
 
 async function getBlogs() {
-  const res = await fetch("http://localhost:5000/api/blogs", {
-    next: { revalidate: 3600 }, // ISR every hour
-  });
-  if (!res.ok) {
-    throw new Error("Failed to fetch blogs");
+  try {
+    const res = await fetch("http://localhost:5000/api/blogs", {
+      next: { revalidate: 3600 }, // ISR every hour
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!res.ok) {
+      console.error("Failed to fetch blogs:", res.status, res.statusText);
+      throw new Error(`Failed to fetch blogs: ${res.status} ${res.statusText}`);
+    }
+    
+    const data = await res.json();
+    console.log("Blogs data:", data); // For debugging
+    return data;
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+    throw error;
   }
-  return res.json();
+}
+
+interface Blog {
+  id: number;
+  title: string;
+  content: string;
+  slug: string;
+  createdAt: string;
+  // Add other fields as needed
 }
 
 export default async function Blogs() {
-  const blogs = await getBlogs();
+  let blogs: Blog[] = [];
+  
+  try {
+    blogs = await getBlogs();
+  } catch (error) {
+    console.error("Error in Blogs page:", error);
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">My Blogs</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogs.map((blog: any) => (
-            <BlogCard key={blog.id} blog={blog} />
-          ))}
+      <main className="flex-1 container mx-auto px-4 py-24">
+        <div className="text-center mb-16 animate-fadeIn">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">My Blogs</h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Read my thoughts, tutorials, and insights on technology and development.
+          </p>
         </div>
+        {blogs && blogs.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {blogs.map((blog: Blog) => (
+              <BlogCard key={blog.id} blog={blog} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-muted-foreground text-center">Check back soon for updates!</p>
+        )}
       </main>
       <Footer />
     </div>
@@ -70,43 +201,93 @@ export default async function Blogs() {
 }
 
 /* ===== src\app\blogs\[slug]\page.tsx ===== */
-/* ===== app/blogs/[slug]/page.tsx ===== */
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+type Blog = {
+  slug: string;
+  title: string;
+  content: string;
+  createdAt: string;
+};
 
 export async function generateStaticParams() {
-  const res = await fetch("http://localhost:5000/api/blogs");
-  const blogs = await res.json();
-  return blogs.map((blog: any) => ({
-    slug: blog.slug,
-  }));
+  try {
+    const res = await fetch("http://localhost:5000/api/blogs");
+    if (!res.ok) {
+      console.error("Failed to fetch blogs for static params:", res.status);
+      return [];
+    }
+    const blogs: Blog[] = await res.json();
+    return blogs.map((blog) => ({
+      slug: blog.slug,
+    }));
+  } catch (error) {
+    console.error("Error generating static params:", error);
+    return [];
+  }
 }
 
 async function getBlog(slug: string) {
-  const res = await fetch(`http://localhost:5000/api/blogs/${slug}`, {
-    next: { revalidate: 3600 }, // ISR
-  });
-  if (!res.ok) {
-    throw new Error("Failed to fetch blog");
+  try {
+    const res = await fetch(`http://localhost:5000/api/blogs/${slug}`, {
+      next: { revalidate: 3600 }, // ISR
+    });
+    if (!res.ok) {
+      console.error(`Failed to fetch blog ${slug}:`, res.status);
+      throw new Error(`Failed to fetch blog: ${res.status}`);
+    }
+    return res.json();
+  } catch (error) {
+    console.error(`Error fetching blog ${slug}:`, error);
+    throw error;
   }
-  return res.json();
 }
 
 export default async function BlogPage({ params }: { params: { slug: string } }) {
-  const blog = await getBlog(params.slug);
+  let blog = null;
+  
+  try {
+    blog = await getBlog(params.slug);
+  } catch (error) {
+    console.error("Error in BlogPage:", error);
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-12">
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-3xl">Blog Not Found</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>The requested blog post could not be found.</p>
+            </CardContent>
+          </Card>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-4">{blog.title}</h1>
-        <div className="text-sm text-gray-500 mb-6">
-          {new Date(blog.createdAt).toLocaleDateString()}
-        </div>
-        <div
-          className="prose max-w-none"
-          dangerouslySetInnerHTML={{ __html: blog.content }}
-        />
+      <main className="flex-1 container mx-auto px-4 py-12">
+        <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-3xl">{blog.title}</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {new Date(blog.createdAt).toLocaleDateString()}
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div
+              className="prose max-w-none dark:prose-invert"
+              dangerouslySetInnerHTML={{ __html: blog.content }}
+            />
+          </CardContent>
+        </Card>
       </main>
       <Footer />
     </div>
@@ -114,7 +295,6 @@ export default async function BlogPage({ params }: { params: { slug: string } })
 }
 
 /* ===== src\app\dashboard\page.tsx ===== */
-/* ===== app/dashboard/page.tsx ===== */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -124,12 +304,17 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BlogForm from "@/components/BlogForm";
 import ProjectForm from "@/components/ProjectForm";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 interface Blog {
   id: number;
   title: string;
   slug: string;
   content: string;
+  createdAt: string;
 }
 
 interface Project {
@@ -140,6 +325,7 @@ interface Project {
   features: string[];
   liveLink?: string;
   repoLink?: string;
+  createdAt: string;
 }
 
 export default function Dashboard() {
@@ -147,6 +333,8 @@ export default function Dashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<"blogs" | "projects">("blogs");
   const router = useRouter();
 
   useEffect(() => {
@@ -156,8 +344,7 @@ export default function Dashboard() {
       return;
     }
 
-    fetchBlogs(token);
-    fetchProjects(token);
+    Promise.all([fetchBlogs(token), fetchProjects(token)]).then(() => setLoading(false));
   }, [router]);
 
   const fetchBlogs = async (token: string) => {
@@ -185,7 +372,7 @@ export default function Dashboard() {
   };
 
   const handleDeleteBlog = async (id: number) => {
-    if (!confirm("Are you sure?")) return;
+    if (!confirm("Are you sure you want to delete this blog?")) return;
     try {
       const token = localStorage.getItem("token")!;
       const res = await fetch(`http://localhost:5000/api/blogs/${id}`, {
@@ -193,7 +380,7 @@ export default function Dashboard() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to delete blog");
-      toast.success("Blog deleted");
+      toast.success("Blog deleted successfully");
       fetchBlogs(token);
     } catch (error) {
       toast.error("Error deleting blog");
@@ -201,7 +388,7 @@ export default function Dashboard() {
   };
 
   const handleDeleteProject = async (id: number) => {
-    if (!confirm("Are you sure?")) return;
+    if (!confirm("Are you sure you want to delete this project?")) return;
     try {
       const token = localStorage.getItem("token")!;
       const res = await fetch(`http://localhost:5000/api/projects/${id}`, {
@@ -209,7 +396,7 @@ export default function Dashboard() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to delete project");
-      toast.success("Project deleted");
+      toast.success("Project deleted successfully");
       fetchProjects(token);
     } catch (error) {
       toast.error("Error deleting project");
@@ -219,67 +406,214 @@ export default function Dashboard() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     router.push("/login");
-    toast.success("Logged out");
+    toast.success("Logged out successfully");
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded">
+      <main className="flex-1 container mx-auto px-4 py-24">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+          <div>
+            <h1 className="text-4xl font-bold">Dashboard</h1>
+            <p className="text-muted-foreground">Manage your content and portfolio</p>
+          </div>
+          <Button variant="destructive" onClick={handleLogout} className="rounded-full">
             Logout
-          </button>
+          </Button>
         </div>
 
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">Manage Blogs</h2>
-          <BlogForm
-            editingBlog={editingBlog}
-            setEditingBlog={setEditingBlog}
-            refreshBlogs={() => fetchBlogs(localStorage.getItem("token")!)}
-          />
-          <ul className="mt-4">
-            {blogs.map((blog) => (
-              <li key={blog.id} className="flex justify-between items-center mb-2">
-                <span>{blog.title}</span>
-                <div>
-                  <button onClick={() => setEditingBlog(blog)} className="mr-2 text-blue-500">
-                    Edit
-                  </button>
-                  <button onClick={() => handleDeleteBlog(blog.id)} className="text-red-500">
-                    Delete
-                  </button>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <Card className="shadow-card rounded-xl">
+              <CardHeader className="pb-4">
+                <div className="flex border-b">
+                  <Button
+                    variant="ghost"
+                    className={cn(
+                      "rounded-none px-6 pb-3 font-semibold",
+                      activeTab === "blogs" 
+                        ? "border-b-2 border-primary text-primary" 
+                        : "text-muted-foreground"
+                    )}
+                    onClick={() => setActiveTab("blogs")}
+                  >
+                    Blogs
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className={cn(
+                      "rounded-none px-6 pb-3 font-semibold",
+                      activeTab === "projects" 
+                        ? "border-b-2 border-primary text-primary" 
+                        : "text-muted-foreground"
+                    )}
+                    onClick={() => setActiveTab("projects")}
+                  >
+                    Projects
+                  </Button>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Manage Projects</h2>
-          <ProjectForm
-            editingProject={editingProject}
-            setEditingProject={setEditingProject}
-            refreshProjects={() => fetchProjects(localStorage.getItem("token")!)}
-          />
-          <ul className="mt-4">
-            {projects.map((project) => (
-              <li key={project.id} className="flex justify-between items-center mb-2">
-                <span>{project.title}</span>
-                <div>
-                  <button onClick={() => setEditingProject(project)} className="mr-2 text-blue-500">
-                    Edit
-                  </button>
-                  <button onClick={() => handleDeleteProject(project.id)} className="text-red-500">
-                    Delete
-                  </button>
+              </CardHeader>
+              <CardContent className="pt-6">
+                {activeTab === "blogs" ? (
+                  <div className="space-y-6">
+                    <BlogForm
+                      editingBlog={editingBlog}
+                      setEditingBlog={setEditingBlog}
+                      refreshBlogs={() => fetchBlogs(localStorage.getItem("token")!)}
+                    />
+                    <div className="border-t pt-6">
+                      <h3 className="text-lg font-semibold mb-4">Your Blogs</h3>
+                      {loading ? (
+                        <div className="space-y-4">
+                          <Skeleton className="h-16 w-full rounded-lg" />
+                          <Skeleton className="h-16 w-full rounded-lg" />
+                          <Skeleton className="h-16 w-full rounded-lg" />
+                        </div>
+                      ) : blogs.length === 0 ? (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <p>No blogs created yet</p>
+                        </div>
+                      ) : (
+                        <ul className="space-y-3">
+                          {blogs.map((blog) => (
+                            <li 
+                              key={blog.id} 
+                              className="flex justify-between items-center p-4 border rounded-lg hover:bg-accent transition-colors animate-fadeIn"
+                            >
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-medium truncate">{blog.title}</h4>
+                                <p className="text-sm text-muted-foreground truncate">
+                                  {new Date(blog.createdAt).toLocaleDateString()}
+                                </p>
+                              </div>
+                              <div className="flex space-x-2 ml-4">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm" 
+                                  onClick={() => setEditingBlog(blog)}
+                                  className="rounded-full"
+                                >
+                                  Edit
+                                </Button>
+                                <Button 
+                                  variant="destructive" 
+                                  size="sm" 
+                                  onClick={() => handleDeleteBlog(blog.id)}
+                                  className="rounded-full"
+                                >
+                                  Delete
+                                </Button>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    <ProjectForm
+                      editingProject={editingProject}
+                      setEditingProject={setEditingProject}
+                      refreshProjects={() => fetchProjects(localStorage.getItem("token")!)}
+                    />
+                    <div className="border-t pt-6">
+                      <h3 className="text-lg font-semibold mb-4">Your Projects</h3>
+                      {loading ? (
+                        <div className="space-y-4">
+                          <Skeleton className="h-16 w-full rounded-lg" />
+                          <Skeleton className="h-16 w-full rounded-lg" />
+                          <Skeleton className="h-16 w-full rounded-lg" />
+                        </div>
+                      ) : projects.length === 0 ? (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <p>No projects created yet</p>
+                        </div>
+                      ) : (
+                        <ul className="space-y-3">
+                          {projects.map((project) => (
+                            <li 
+                              key={project.id} 
+                              className="flex justify-between items-center p-4 border rounded-lg hover:bg-accent transition-colors animate-fadeIn"
+                            >
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-medium truncate">{project.title}</h4>
+                                <p className="text-sm text-muted-foreground truncate line-clamp-1">
+                                  {project.description.replace(/<[^>]*>/g, '')}
+                                </p>
+                              </div>
+                              <div className="flex space-x-2 ml-4">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm" 
+                                  onClick={() => setEditingProject(project)}
+                                  className="rounded-full"
+                                >
+                                  Edit
+                                </Button>
+                                <Button 
+                                  variant="destructive" 
+                                  size="sm" 
+                                  onClick={() => handleDeleteProject(project.id)}
+                                  className="rounded-full"
+                                >
+                                  Delete
+                                </Button>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+          
+          <div className="space-y-8">
+            <Card className="shadow-card rounded-xl">
+              <CardHeader>
+                <CardTitle className="text-xl">Quick Stats</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-primary/5 p-4 rounded-lg text-center">
+                    <p className="text-2xl font-bold">{blogs.length}</p>
+                    <p className="text-sm text-muted-foreground">Blogs</p>
+                  </div>
+                  <div className="bg-accent p-4 rounded-lg text-center">
+                    <p className="text-2xl font-bold">{projects.length}</p>
+                    <p className="text-sm text-muted-foreground">Projects</p>
+                  </div>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </section>
+              </CardContent>
+            </Card>
+            
+            <Card className="shadow-card rounded-xl">
+              <CardHeader>
+                <CardTitle className="text-xl">Tips</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    <span>Keep your blog titles concise and engaging</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    <span>Add high-quality images to your projects</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    <span>Regularly update your portfolio content</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </main>
       <Footer />
     </div>
@@ -326,7 +660,6 @@ export default function RootLayout({
 
 
 /* ===== src\app\login\page.tsx ===== */
-/* ===== app/login/page.tsx ===== */
 "use client";
 
 import { useState } from "react";
@@ -335,70 +668,133 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
+interface LoginForm {
+  email: string;
+  password: string;
+}
+
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState<LoginForm>({
+    email: "",
+    password: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     try {
-      loginSchema.parse({ email, password });
+      loginSchema.parse(formData);
+      
+      setIsLoading(true);
+      
       const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        headers: { 
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       });
+      
       if (!res.ok) {
-        throw new Error("Invalid credentials");
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Invalid credentials");
       }
+      
       const { token } = await res.json();
       localStorage.setItem("token", token);
       toast.success("Logged in successfully");
       router.push("/dashboard");
-    } catch (error: any) {
-      toast.error(error.message || "Login failed");
+    } catch (error: unknown) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.issues[0].message);
+      } else if (error instanceof Error) {
+        toast.error(error.message || "Login failed");
+      } else {
+        toast.error("Login failed");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-          <div className="mb-4">
-            <label htmlFor="email" className="block mb-1">Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="block mb-1">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
-            Login
-          </button>
-        </form>
+      <main className="flex-1 container mx-auto px-4 py-12 flex items-center justify-center">
+        <Card className="w-full max-w-md shadow-card rounded-xl animate-fadeIn">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl">Welcome Back</CardTitle>
+            <p className="text-muted-foreground">Sign in to your account</p>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-lg font-medium">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50"
+                  placeholder="Enter your email"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-lg font-medium">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  className="py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50"
+                  placeholder="Enter your password"
+                />
+              </div>
+              <Button 
+                type="submit" 
+                disabled={isLoading}
+                className="w-full py-6 rounded-full text-lg transition-all duration-300 hover:scale-105"
+              >
+                {isLoading ? (
+                  <>
+                    <span className="mr-2 h-4 w-4 animate-spin">⏳</span>
+                    Signing in...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
+              </Button>
+            </form>
+            
+            <div className="mt-6 text-center">
+              <p className="text-muted-foreground">
+                Default credentials: admin@example.com / password123
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </main>
       <Footer />
     </div>
@@ -406,52 +802,86 @@ export default function Login() {
 }
 
 /* ===== src\app\page.tsx ===== */
-/* ===== app/page.tsx ===== */
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <section className="text-center mb-16">
-          <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1>
-          <p className="text-lg mb-8">
-            Showcase of my projects, blogs, and more.
+      <main className="flex-1 container mx-auto px-4 py-24">
+        <section className="text-center mb-24 animate-fadeIn">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 gradient-text">
+            Welcome to My Portfolio
+          </h1>
+          <p className="text-xl md:text-2xl mb-10 text-muted-foreground max-w-3xl mx-auto">
+            Showcasing innovative projects, insightful blogs, and my journey in tech.
           </p>
-          <Image
-            src="/next.svg" // Replace with your logo or hero image
-            alt="Portfolio Logo"
-            width={180}
-            height={38}
-            className="mx-auto mb-8"
-          />
+          <div className="flex justify-center mb-12">
+            <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-primary/20 shadow-card">
+              <Image
+                src="/placeholder.svg?height=224&width=224"
+                alt="Portfolio Logo"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
+          <Button asChild size="lg" className="rounded-full px-8 text-lg">
+            <Link href="/projects">Explore Projects</Link>
+          </Button>
         </section>
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <Link
-            href="/about"
-            className="p-6 border rounded-lg hover:shadow-lg transition"
-          >
-            <h2 className="text-2xl font-semibold mb-2">About Me</h2>
-            <p>Learn more about my background and skills.</p>
-          </Link>
-          <Link
-            href="/projects"
-            className="p-6 border rounded-lg hover:shadow-lg transition"
-          >
-            <h2 className="text-2xl font-semibold mb-2">Projects</h2>
-            <p>Explore my personal projects.</p>
-          </Link>
-          <Link
-            href="/blogs"
-            className="p-6 border rounded-lg hover:shadow-lg transition"
-          >
-            <h2 className="text-2xl font-semibold mb-2">Blogs</h2>
-            <p>Read my latest articles.</p>
-          </Link>
+        
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
+          <Card className="hover:shadow-card-hover transition-all duration-300 rounded-xl border-0 bg-gradient-to-br from-background to-accent/10 animate-slideIn">
+            <CardHeader>
+              <CardTitle className="text-2xl">About Me</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-6">Discover my background, skills, and passions.</p>
+              <Button variant="outline" asChild className="rounded-full">
+                <Link href="/about">Learn More</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          
+          <Card className="hover:shadow-card-hover transition-all duration-300 rounded-xl border-0 bg-gradient-to-br from-background to-primary/10 animate-slideIn" style={{ animationDelay: '0.1s' }}>
+            <CardHeader>
+              <CardTitle className="text-2xl">Projects</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-6">View my latest creations and innovations.</p>
+              <Button variant="outline" asChild className="rounded-full">
+                <Link href="/projects">View Projects</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          
+          <Card className="hover:shadow-card-hover transition-all duration-300 rounded-xl border-0 bg-gradient-to-br from-background to-accent/10 animate-slideIn" style={{ animationDelay: '0.2s' }}>
+            <CardHeader>
+              <CardTitle className="text-2xl">Blogs</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-6">Read my thoughts on tech and development.</p>
+              <Button variant="outline" asChild className="rounded-full">
+                <Link href="/blogs">Read Blogs</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </section>
+        
+        <section className="text-center py-16 bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl">
+          <h2 className="text-3xl font-bold mb-4">Let us Connect</h2>
+          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Interested in working together or have questions? Feel free to reach out!
+          </p>
+          <Button asChild variant="outline" className="rounded-full">
+            <Link href="/contact">Get in Touch</Link>
+          </Button>
         </section>
       </main>
       <Footer />
@@ -460,34 +890,74 @@ export default function Home() {
 }
 
 /* ===== src\app\projects\page.tsx ===== */
-/* ===== app/projects/page.tsx ===== */
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectsCard";
 
 async function getProjects() {
-  const res = await fetch("http://localhost:5000/api/projects", {
-    next: { revalidate: 3600 }, // ISR every hour
-  });
-  if (!res.ok) {
-    throw new Error("Failed to fetch projects");
+  try {
+    const res = await fetch("http://localhost:5000/api/projects", {
+      next: { revalidate: 3600 }, // ISR every hour
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!res.ok) {
+      console.error("Failed to fetch projects:", res.status, res.statusText);
+      throw new Error(`Failed to fetch projects: ${res.status} ${res.statusText}`);
+    }
+    
+    const data = await res.json();
+    console.log("Projects data:", data); // For debugging
+    return data;
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+    throw error;
   }
-  return res.json();
+}
+
+interface Project {
+  id: number;
+  title: string;
+  thumbnail?: string;
+  description: string;
+  features: string[];
+  liveLink?: string;
+  repoLink?: string;
 }
 
 export default async function Projects() {
-  const projects = await getProjects();
+  let projects: Project[] = [];
+  
+  try {
+    projects = await getProjects();
+  } catch (error) {
+    console.error("Error in Projects page:", error);
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">My Projects</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project: any) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
+      <main className="flex-1 container mx-auto px-4 py-24">
+        <div className="text-center mb-16 animate-fadeIn">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">My Projects</h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Explore my latest creations and innovations in web development and design.
+          </p>
         </div>
+        {projects && projects.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project: Project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold mb-4">No projects available yet</h2>
+            <p className="text-muted-foreground">Check back soon for updates!</p>
+          </div>
+        )}
       </main>
       <Footer />
     </div>
@@ -495,8 +965,9 @@ export default async function Projects() {
 }
 
 /* ===== src\components\BlogCard.tsx ===== */
-/* ===== components/BlogCard.tsx ===== */
 import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface BlogCardProps {
   blog: {
@@ -509,15 +980,25 @@ interface BlogCardProps {
 
 export default function BlogCard({ blog }: BlogCardProps) {
   return (
-    <div className="border rounded-lg p-4 hover:shadow-lg transition">
-      <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
-      <p className="text-sm text-gray-500 mb-4">
-        {new Date(blog.createdAt).toLocaleDateString()}
-      </p>
-      <Link href={`/blogs/${blog.slug}`} className="text-blue-500">
-        Read More
-      </Link>
-    </div>
+    <Card className="hover:shadow-card-hover transition-all duration-300 overflow-hidden rounded-xl animate-fadeIn">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-xl line-clamp-2">{blog.title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm text-muted-foreground mb-4">
+          {new Date(blog.createdAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          })}
+        </p>
+        <Button asChild variant="outline" className="w-full rounded-full">
+          <Link href={`/blogs/${blog.slug}`}>
+            Read Article
+          </Link>
+        </Button>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -525,28 +1006,59 @@ export default function BlogCard({ blog }: BlogCardProps) {
 /* ===== components/BlogForm.tsx ===== */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-// import dynamic from "next/dynamic";
-// const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-// import "react-quill/dist/quill.snow.css";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { cn } from "@/lib/utils";
+
+interface Blog {
+  id: number;
+  title: string;
+  slug: string;
+  content: string;
+  createdAt: string;
+}
 
 interface BlogFormProps {
-  editingBlog: any | null;
-  setEditingBlog: (blog: any | null) => void;
+  editingBlog: Blog | null;
+  setEditingBlog: (blog: Blog | null) => void;
   refreshBlogs: () => void;
 }
 
 export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: BlogFormProps) {
   const [title, setTitle] = useState(editingBlog?.title || "");
-  const [content, setContent] = useState(editingBlog?.content || "");
+  const [isMounted, setIsMounted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Prevent SSR by only initializing editor on client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: editingBlog?.content || "",
+    editorProps: {
+      attributes: {
+        class: 'prose focus:outline-none min-h-[200px] p-4 border rounded-lg transition-colors duration-300 focus:border-primary',
+      },
+    },
+    immediatelyRender: false, // Explicitly disable SSR rendering
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !content) {
+    if (!title || !editor?.getHTML()) {
       toast.error("Title and content are required");
       return;
     }
+    
+    setIsSubmitting(true);
+    
     try {
       const token = localStorage.getItem("token")!;
       const url = editingBlog
@@ -559,93 +1071,148 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ title, content }),
+        body: JSON.stringify({ title, content: editor.getHTML() }),
       });
       if (!res.ok) throw new Error("Failed to save blog");
-      toast.success(editingBlog ? "Blog updated" : "Blog created");
+      toast.success(editingBlog ? "Blog updated successfully" : "Blog created successfully");
       setTitle("");
-      setContent("");
+      editor?.commands.clearContent();
       setEditingBlog(null);
       refreshBlogs();
     } catch (error) {
       toast.error("Error saving blog");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  if (!isMounted) {
+    return null; // Prevent rendering on server
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="mb-4">
-        <label htmlFor="title" className="block mb-1">Title</label>
-        <input
+    <form onSubmit={handleSubmit} className="space-y-6 animate-fadeIn">
+      <div className="space-y-2">
+        <Label htmlFor="title" className="text-lg font-medium">Title</Label>
+        <Input
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border rounded"
           required
+          className="text-lg py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50"
+          placeholder="Enter blog title"
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="content" className="block mb-1">Content</label>
-        {/* <ReactQuill value={content} onChange={setContent} /> */}
+      <div className="space-y-2">
+        <Label className="text-lg font-medium">Content</Label>
+        <div className="border rounded-lg transition-all duration-300 focus-within:ring-2 focus-within:ring-primary/50 focus-within:border-primary">
+          <EditorContent 
+            editor={editor} 
+            className="min-h-[200px]"
+          />
+        </div>
       </div>
-      <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
-        {editingBlog ? "Update Blog" : "Create Blog"}
-      </button>
-      {editingBlog && (
-        <button
-          type="button"
-          onClick={() => setEditingBlog(null)}
-          className="ml-2 bg-gray-500 text-white px-4 py-2 rounded"
+      <div className="flex flex-wrap gap-3 pt-4">
+        <Button 
+          type="submit" 
+          disabled={isSubmitting}
+          className="rounded-full px-6 transition-all duration-300 hover:scale-105"
         >
-          Cancel
-        </button>
-      )}
+          {isSubmitting ? (
+            <>
+              <span className="mr-2 h-4 w-4 animate-spin">⏳</span>
+              {editingBlog ? "Updating..." : "Creating..."}
+            </>
+          ) : (
+            editingBlog ? "Update Blog" : "Create Blog"
+          )}
+        </Button>
+        {editingBlog && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setEditingBlog(null)}
+            className="rounded-full px-6 transition-all duration-300 hover:scale-105"
+          >
+            Cancel
+          </Button>
+        )}
+      </div>
     </form>
   );
 }
 
 /* ===== src\components\Footer.tsx ===== */
-/* ===== components/Footer.tsx ===== */
+import { Button } from "@/components/ui/button";
+
 export default function Footer() {
   return (
-    <footer className="bg-gray-800 text-white py-4 text-center">
-      <p>&copy; 2025 My Portfolio. All rights reserved.</p>
+    <footer className="bg-background border-t py-6 text-center">
+      <div className="container mx-auto px-4">
+        <p className="text-muted-foreground mb-4">&copy; 2025 My Portfolio. All rights reserved.</p>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Button variant="link" className="px-2">Privacy Policy</Button>
+          <Button variant="link" className="px-2">Terms of Service</Button>
+          <Button variant="link" className="px-2">Contact</Button>
+        </div>
+      </div>
     </footer>
   );
 }
 
 /* ===== src\components\Header.tsx ===== */
-/* ===== components/Header.tsx ===== */
 "use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     setIsLoggedIn(!!localStorage.getItem("token"));
+    
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header className="bg-gray-800 text-white py-4">
+    <header className={cn(
+      "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+      isScrolled ? "bg-background/80 backdrop-blur-md py-2 shadow-sm" : "bg-background py-4"
+    )}>
       <nav className="container mx-auto px-4 flex justify-between items-center">
-        <Link href="/" className="text-xl font-bold">Portfolio</Link>
-        <ul className="flex space-x-4">
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/about">About</Link></li>
-          <li><Link href="/projects">Projects</Link></li>
-          <li><Link href="/blogs">Blogs</Link></li>
-          {isLoggedIn ? (
-            <li>
-              <Link href="/dashboard">Dashboard</Link>
+        <Link 
+          href="/" 
+          className="text-2xl font-bold gradient-text"
+        >
+          Portfolio
+        </Link>
+        <ul className="flex space-x-1 md:space-x-2">
+          {[
+            { href: "/", label: "Home" },
+            { href: "/about", label: "About" },
+            { href: "/projects", label: "Projects" },
+            { href: "/blogs", label: "Blogs" },
+            { href: isLoggedIn ? "/dashboard" : "/login", label: isLoggedIn ? "Dashboard" : "Login" }
+          ].map((item) => (
+            <li key={item.href}>
+              <Button 
+                variant="ghost" 
+                asChild
+                className="text-foreground/80 hover:text-foreground hover:bg-accent/50 rounded-full px-3 md:px-4"
+              >
+                <Link href={item.href}>{item.label}</Link>
+              </Button>
             </li>
-          ) : (
-            <li>
-              <Link href="/login">Login</Link>
-            </li>
-          )}
+          ))}
         </ul>
       </nav>
     </header>
@@ -656,37 +1223,75 @@ export default function Header() {
 /* ===== components/ProjectForm.tsx ===== */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { cn } from "@/lib/utils";
+
+interface Project {
+  id: number;
+  title: string;
+  thumbnail?: string;
+  description: string;
+  features: string[];
+  liveLink?: string;
+  repoLink?: string;
+  createdAt: string;
+}
 
 interface ProjectFormProps {
-  editingProject: any | null;
-  setEditingProject: (project: any | null) => void;
+  editingProject: Project | null;
+  setEditingProject: (project: Project | null) => void;
   refreshProjects: () => void;
 }
 
 export default function ProjectForm({ editingProject, setEditingProject, refreshProjects }: ProjectFormProps) {
   const [title, setTitle] = useState(editingProject?.title || "");
   const [thumbnail, setThumbnail] = useState(editingProject?.thumbnail || "");
-  const [description, setDescription] = useState(editingProject?.description || "");
-  const [features, setFeatures] = useState(editingProject?.features.join(", ") || "");
+  const [features, setFeatures] = useState(editingProject?.features?.join(", ") || "");
   const [liveLink, setLiveLink] = useState(editingProject?.liveLink || "");
   const [repoLink, setRepoLink] = useState(editingProject?.repoLink || "");
+  const [isMounted, setIsMounted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Prevent SSR by only initializing editor on client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: editingProject?.description || "",
+    editorProps: {
+      attributes: {
+        class: 'prose focus:outline-none min-h-[150px] p-4 border rounded-lg transition-colors duration-300 focus:border-primary',
+      },
+    },
+    immediatelyRender: false, // Explicitly disable SSR rendering
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !description) {
+    if (!title || !editor?.getHTML()) {
       toast.error("Title and description are required");
       return;
     }
+    
+    setIsSubmitting(true);
+    
     const data = {
       title,
       thumbnail,
-      description,
-      features: features.split(",").map((f: string) => f.trim()),
+      description: editor.getHTML(),
+      features: features.split(",").map((f: string) => f.trim()).filter(Boolean),
       liveLink,
       repoLink,
     };
+    
     try {
       const token = localStorage.getItem("token")!;
       const url = editingProject
@@ -702,10 +1307,10 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to save project");
-      toast.success(editingProject ? "Project updated" : "Project created");
+      toast.success(editingProject ? "Project updated successfully" : "Project created successfully");
       setTitle("");
       setThumbnail("");
-      setDescription("");
+      editor?.commands.clearContent();
       setFeatures("");
       setLiveLink("");
       setRepoLink("");
@@ -713,85 +1318,120 @@ export default function ProjectForm({ editingProject, setEditingProject, refresh
       refreshProjects();
     } catch (error) {
       toast.error("Error saving project");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  if (!isMounted) {
+    return null; // Prevent rendering on server
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="mb-4">
-        <label htmlFor="title" className="block mb-1">Title</label>
-        <input
+    <form onSubmit={handleSubmit} className="space-y-6 animate-fadeIn">
+      <div className="space-y-2">
+        <Label htmlFor="title" className="text-lg font-medium">Title</Label>
+        <Input
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border rounded"
           required
+          className="text-lg py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50"
+          placeholder="Enter project title"
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="thumbnail" className="block mb-1">Thumbnail URL</label>
-        <input
+      
+      <div className="space-y-2">
+        <Label htmlFor="thumbnail" className="text-lg font-medium">Thumbnail URL</Label>
+        <Input
           id="thumbnail"
           value={thumbnail}
           onChange={(e) => setThumbnail(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50"
+          placeholder="https://example.com/image.jpg"
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="description" className="block mb-1">Description</label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full p-2 border rounded"
-          required
-        />
+      
+      <div className="space-y-2">
+        <Label className="text-lg font-medium">Description</Label>
+        <div className="border rounded-lg transition-all duration-300 focus-within:ring-2 focus-within:ring-primary/50 focus-within:border-primary">
+          <EditorContent 
+            editor={editor} 
+            className="min-h-[150px]"
+          />
+        </div>
       </div>
-      <div className="mb-4">
-        <label htmlFor="features" className="block mb-1">Features (comma-separated)</label>
-        <input
+      
+      <div className="space-y-2">
+        <Label htmlFor="features" className="text-lg font-medium">Features (comma-separated)</Label>
+        <Input
           id="features"
           value={features}
           onChange={(e) => setFeatures(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50"
+          placeholder="Feature 1, Feature 2, Feature 3"
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="liveLink" className="block mb-1">Live Link</label>
-        <input
-          id="liveLink"
-          value={liveLink}
-          onChange={(e) => setLiveLink(e.target.value)}
-          className="w-full p-2 border rounded"
-        />
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="liveLink" className="text-lg font-medium">Live Link</Label>
+          <Input
+            id="liveLink"
+            value={liveLink}
+            onChange={(e) => setLiveLink(e.target.value)}
+            className="py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50"
+            placeholder="https://example.com/live-demo"
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="repoLink" className="text-lg font-medium">Repository Link</Label>
+          <Input
+            id="repoLink"
+            value={repoLink}
+            onChange={(e) => setRepoLink(e.target.value)}
+            className="py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50"
+            placeholder="https://github.com/username/repo"
+          />
+        </div>
       </div>
-      <div className="mb-4">
-        <label htmlFor="repoLink" className="block mb-1">Repo Link</label>
-        <input
-          id="repoLink"
-          value={repoLink}
-          onChange={(e) => setRepoLink(e.target.value)}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
-        {editingProject ? "Update Project" : "Create Project"}
-      </button>
-      {editingProject && (
-        <button
-          type="button"
-          onClick={() => setEditingProject(null)}
-          className="ml-2 bg-gray-500 text-white px-4 py-2 rounded"
+      
+      <div className="flex flex-wrap gap-3 pt-4">
+        <Button 
+          type="submit" 
+          disabled={isSubmitting}
+          className="rounded-full px-6 transition-all duration-300 hover:scale-105"
         >
-          Cancel
-        </button>
-      )}
+          {isSubmitting ? (
+            <>
+              <span className="mr-2 h-4 w-4 animate-spin">⏳</span>
+              {editingProject ? "Updating..." : "Creating..."}
+            </>
+          ) : (
+            editingProject ? "Update Project" : "Create Project"
+          )}
+        </Button>
+        {editingProject && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setEditingProject(null)}
+            className="rounded-full px-6 transition-all duration-300 hover:scale-105"
+          >
+            Cancel
+          </Button>
+        )}
+      </div>
     </form>
   );
 }
 
 /* ===== src\components\ProjectsCard.tsx ===== */
-/* ===== components/ProjectCard.tsx ===== */
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
 interface ProjectCardProps {
   project: {
     id: number;
@@ -806,30 +1446,316 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <div className="border rounded-lg p-4 hover:shadow-lg transition">
-      {project.thumbnail && (
-        <img src={project.thumbnail} alt={project.title} className="w-full h-40 object-cover mb-4" />
+    <Card className="overflow-hidden rounded-xl hover:shadow-card-hover transition-all duration-300 animate-fadeIn">
+      {project.thumbnail ? (
+        <div className="relative h-48 w-full">
+          <img 
+            src={project.thumbnail} 
+            alt={project.title} 
+            className="object-cover"
+            loading="lazy"
+          />
+        </div>
+      ) : (
+        <div className="h-48 w-full bg-gradient-to-r from-primary/20 to-accent/20 flex items-center justify-center">
+          <div className="text-4xl font-bold text-primary/30">No Image</div>
+        </div>
       )}
-      <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-      <p className="mb-4">{project.description}</p>
-      <ul className="list-disc pl-4 mb-4">
-        {project.features.map((feature, idx) => (
-          <li key={idx}>{feature}</li>
-        ))}
-      </ul>
-      {project.liveLink && (
-        <a href={project.liveLink} target="_blank" rel="noopener noreferrer" className="text-blue-500 mr-4">
-          Live Demo
-        </a>
-      )}
-      {project.repoLink && (
-        <a href={project.repoLink} target="_blank" rel="noopener noreferrer" className="text-blue-500">
-          Repository
-        </a>
-      )}
-    </div>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-xl line-clamp-1">{project.title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div 
+          className="prose max-w-none mb-4 text-sm line-clamp-3 dark:prose-invert" 
+          dangerouslySetInnerHTML={{ __html: project.description }} 
+        />
+        <div className="flex flex-wrap gap-1 mb-4">
+          {project.features.slice(0, 3).map((feature, idx) => (
+            <span 
+              key={idx} 
+              className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full"
+            >
+              {feature}
+            </span>
+          ))}
+          {project.features.length > 3 && (
+            <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full">
+              +{project.features.length - 3} more
+            </span>
+          )}
+        </div>
+        <div className="flex gap-2">
+          {project.liveLink && (
+            <Button variant="outline" size="sm" asChild className="flex-1 rounded-full">
+              <a href={project.liveLink} target="_blank" rel="noopener noreferrer">
+                Live Demo
+              </a>
+            </Button>
+          )}
+          {project.repoLink && (
+            <Button variant="outline" size="sm" asChild className="flex-1 rounded-full">
+              <a href={project.repoLink} target="_blank" rel="noopener noreferrer">
+                Repository
+              </a>
+            </Button>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
+
+/* ===== src\components\ui\button.tsx ===== */
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+
+import { cn } from "@/lib/utils"
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground shadow-md hover:bg-primary/90 hover:shadow-lg active:scale-95",
+        destructive:
+          "bg-destructive text-white shadow-md hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 hover:shadow-lg active:scale-95",
+        outline:
+          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:shadow-md active:scale-95",
+        secondary:
+          "bg-secondary text-secondary-foreground shadow-md hover:bg-secondary/80 hover:shadow-lg active:scale-95",
+        ghost:
+          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 active:scale-95",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-10 px-4 py-2 has-[>svg]:px-3",
+        sm: "h-9 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
+        lg: "h-11 rounded-lg px-8 has-[>svg]:px-4",
+        icon: "size-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+function Button({
+  className,
+  variant,
+  size,
+  asChild = false,
+  ...props
+}: React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean
+  }) {
+  const Comp = asChild ? Slot : "button"
+
+  return (
+    <Comp
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
+}
+
+export { Button, buttonVariants }
+
+/* ===== src\components\ui\card.tsx ===== */
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+function Card({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card"
+      className={cn(
+        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-header"
+      className={cn(
+        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-title"
+      className={cn("leading-none font-semibold", className)}
+      {...props}
+    />
+  )
+}
+
+function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-description"
+      className={cn("text-muted-foreground text-sm", className)}
+      {...props}
+    />
+  )
+}
+
+function CardAction({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-action"
+      className={cn(
+        "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-content"
+      className={cn("px-6", className)}
+      {...props}
+    />
+  )
+}
+
+function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-footer"
+      className={cn("flex items-center px-6 [.border-t]:pt-6", className)}
+      {...props}
+    />
+  )
+}
+
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardAction,
+  CardDescription,
+  CardContent,
+}
+
+
+/* ===== src\components\ui\input.tsx ===== */
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+  return (
+    <input
+      type={type}
+      data-slot="input"
+      className={cn(
+        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export { Input }
+
+
+/* ===== src\components\ui\label.tsx ===== */
+"use client"
+
+import * as React from "react"
+import * as LabelPrimitive from "@radix-ui/react-label"
+
+import { cn } from "@/lib/utils"
+
+function Label({
+  className,
+  ...props
+}: React.ComponentProps<typeof LabelPrimitive.Root>) {
+  return (
+    <LabelPrimitive.Root
+      data-slot="label"
+      className={cn(
+        "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export { Label }
+
+
+/* ===== src\components\ui\skeleton.tsx ===== */
+import { cn } from "@/lib/utils"
+
+function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="skeleton"
+      className={cn("bg-accent animate-pulse rounded-md", className)}
+      {...props}
+    />
+  )
+}
+
+export { Skeleton }
+
+
+/* ===== src\components\ui\textarea.tsx ===== */
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
+  return (
+    <textarea
+      data-slot="textarea"
+      className={cn(
+        "border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export { Textarea }
+
+
+/* ===== src\lib\utils.ts ===== */
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
 
 /* ===== src\tools\combine-selected-modules.js ===== */
 import fs from 'fs';

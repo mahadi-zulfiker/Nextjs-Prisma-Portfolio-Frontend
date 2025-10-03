@@ -25,8 +25,17 @@ async function getBlogs() {
   }
 }
 
+interface Blog {
+  id: number;
+  title: string;
+  content: string;
+  slug: string;
+  createdAt: string;
+  // Add other fields as needed
+}
+
 export default async function Blogs() {
-  let blogs = [];
+  let blogs: Blog[] = [];
   
   try {
     blogs = await getBlogs();
@@ -44,18 +53,14 @@ export default async function Blogs() {
             Read my thoughts, tutorials, and insights on technology and development.
           </p>
         </div>
-        
-        {blogs && blogs.length === 0 ? (
-          <div className="text-center py-16">
-            <h2 className="text-2xl font-semibold mb-4">No blogs available yet</h2>
-            <p className="text-muted-foreground">Check back soon for updates!</p>
-          </div>
-        ) : (
+        {blogs && blogs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogs && blogs.map((blog: any) => (
+            {blogs.map((blog: Blog) => (
               <BlogCard key={blog.id} blog={blog} />
             ))}
           </div>
+        ) : (
+          <p className="text-muted-foreground text-center">Check back soon for updates!</p>
         )}
       </main>
       <Footer />
