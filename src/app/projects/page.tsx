@@ -1,7 +1,7 @@
 /* ===== app/projects/page.tsx ===== */
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProjectCard from "@/components/ProjectCard";
+import ProjectCard from "@/components/ProjectsCard";
 
 async function getProjects() {
   const res = await fetch("http://localhost:5000/api/projects", {
