@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface BlogCardProps {
   blog: {
@@ -12,17 +13,23 @@ interface BlogCardProps {
 
 export default function BlogCard({ blog }: BlogCardProps) {
   return (
-    <Card className="hover:shadow-xl transition-shadow">
-      <CardHeader>
-        <CardTitle className="text-xl">{blog.title}</CardTitle>
+    <Card className="hover:shadow-card-hover transition-all duration-300 overflow-hidden rounded-xl animate-fadeIn">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-xl line-clamp-2">{blog.title}</CardTitle>
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground mb-4">
-          {new Date(blog.createdAt).toLocaleDateString()}
+          {new Date(blog.createdAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          })}
         </p>
-        <Link href={`/blogs/${blog.slug}`} className="text-primary hover:underline">
-          Read More
-        </Link>
+        <Button asChild variant="outline" className="w-full rounded-full">
+          <Link href={`/blogs/${blog.slug}`}>
+            Read Article
+          </Link>
+        </Button>
       </CardContent>
     </Card>
   );

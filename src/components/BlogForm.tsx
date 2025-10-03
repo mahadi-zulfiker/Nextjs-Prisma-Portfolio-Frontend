@@ -8,16 +8,26 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import { cn } from "@/lib/utils";
+
+interface Blog {
+  id: number;
+  title: string;
+  slug: string;
+  content: string;
+  createdAt: string;
+}
 
 interface BlogFormProps {
-  editingBlog: any | null;
-  setEditingBlog: (blog: any | null) => void;
+  editingBlog: Blog | null;
+  setEditingBlog: (blog: Blog | null) => void;
   refreshBlogs: () => void;
 }
 
 export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: BlogFormProps) {
   const [title, setTitle] = useState(editingBlog?.title || "");
   const [isMounted, setIsMounted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Prevent SSR by only initializing editor on client
   useEffect(() => {
@@ -29,7 +39,7 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
     content: editingBlog?.content || "",
     editorProps: {
       attributes: {
-        class: 'prose focus:outline-none min-h-[200px] p-2 border rounded',
+        class: 'prose focus:outline-none min-h-[200px] p-4 border rounded-lg transition-colors duration-300 focus:border-primary',
       },
     },
     immediatelyRender: false, // Explicitly disable SSR rendering
@@ -41,6 +51,9 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
       toast.error("Title and content are required");
       return;
     }
+    
+    setIsSubmitting(true);
+    
     try {
       const token = localStorage.getItem("token")!;
       const url = editingBlog
@@ -56,13 +69,15 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
         body: JSON.stringify({ title, content: editor.getHTML() }),
       });
       if (!res.ok) throw new Error("Failed to save blog");
-      toast.success(editingBlog ? "Blog updated" : "Blog created");
+      toast.success(editingBlog ? "Blog updated successfully" : "Blog created successfully");
       setTitle("");
       editor?.commands.clearContent();
       setEditingBlog(null);
       refreshBlogs();
     } catch (error) {
       toast.error("Error saving blog");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -71,29 +86,48 @@ export default function BlogForm({ editingBlog, setEditingBlog, refreshBlogs }: 
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <Label htmlFor="title">Title</Label>
+    <form onSubmit={handleSubmit} className="space-y-6 animate-fadeIn">
+      <div className="space-y-2">
+        <Label htmlFor="title" className="text-lg font-medium">Title</Label>
         <Input
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
+          className="text-lg py-6 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary/50"
+          placeholder="Enter blog title"
         />
       </div>
-      <div>
-        <Label>Content</Label>
-        <EditorContent editor={editor} />
+      <div className="space-y-2">
+        <Label className="text-lg font-medium">Content</Label>
+        <div className="border rounded-lg transition-all duration-300 focus-within:ring-2 focus-within:ring-primary/50 focus-within:border-primary">
+          <EditorContent 
+            editor={editor} 
+            className="min-h-[200px]"
+          />
+        </div>
       </div>
-      <div className="space-x-2">
-        <Button type="submit">
-          {editingBlog ? "Update Blog" : "Create Blog"}
+      <div className="flex flex-wrap gap-3 pt-4">
+        <Button 
+          type="submit" 
+          disabled={isSubmitting}
+          className="rounded-full px-6 transition-all duration-300 hover:scale-105"
+        >
+          {isSubmitting ? (
+            <>
+              <span className="mr-2 h-4 w-4 animate-spin">⏳</span>
+              {editingBlog ? "Updating..." : "Creating..."}
+            </>
+          ) : (
+            editingBlog ? "Update Blog" : "Create Blog"
+          )}
         </Button>
         {editingBlog && (
           <Button
             type="button"
-            variant="secondary"
+            variant="outline"
             onClick={() => setEditingBlog(null)}
+            className="rounded-full px-6 transition-all duration-300 hover:scale-105"
           >
             Cancel
           </Button>

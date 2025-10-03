@@ -3,25 +3,62 @@ import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export async function generateStaticParams() {
-  const res = await fetch("http://localhost:5000/api/blogs");
-  const blogs = await res.json();
-  return blogs.map((blog: any) => ({
-    slug: blog.slug,
-  }));
+  try {
+    const res = await fetch("http://localhost:5000/api/blogs");
+    if (!res.ok) {
+      console.error("Failed to fetch blogs for static params:", res.status);
+      return [];
+    }
+    const blogs = await res.json();
+    return blogs.map((blog: any) => ({
+      slug: blog.slug,
+    }));
+  } catch (error) {
+    console.error("Error generating static params:", error);
+    return [];
+  }
 }
 
 async function getBlog(slug: string) {
-  const res = await fetch(`http://localhost:5000/api/blogs/${slug}`, {
-    next: { revalidate: 3600 }, // ISR
-  });
-  if (!res.ok) {
-    throw new Error("Failed to fetch blog");
+  try {
+    const res = await fetch(`http://localhost:5000/api/blogs/${slug}`, {
+      next: { revalidate: 3600 }, // ISR
+    });
+    if (!res.ok) {
+      console.error(`Failed to fetch blog ${slug}:`, res.status);
+      throw new Error(`Failed to fetch blog: ${res.status}`);
+    }
+    return res.json();
+  } catch (error) {
+    console.error(`Error fetching blog ${slug}:`, error);
+    throw error;
   }
-  return res.json();
 }
 
 export default async function BlogPage({ params }: { params: { slug: string } }) {
-  const blog = await getBlog(params.slug);
+  let blog = null;
+  
+  try {
+    blog = await getBlog(params.slug);
+  } catch (error) {
+    console.error("Error in BlogPage:", error);
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-12">
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-3xl">Blog Not Found</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>The requested blog post could not be found.</p>
+            </CardContent>
+          </Card>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
